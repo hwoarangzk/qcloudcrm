@@ -25,6 +25,10 @@ class CustomersearchController extends \Tuanduimao\Loader\Controller {
 		$Customer->testcreate();
 	}
 
+	function test1() {
+		phpinfo();
+	}
+
 	/**
 	 * 首页载入
 	 * @return [type] [description]
