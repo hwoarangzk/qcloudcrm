@@ -1,26 +1,36 @@
 {
     "name": "crm",
-    "version": "1.0.0",
-    "cname": "tuanduimao",
-    "icon": "si-puzzle",
-    "icontype": "si",
-    "intro": "\u56e2\u961f\u732b\u5e94\u7528\u6f14\u793a",
+    "version": "1.0",
+    "cname": "客户管理",
+    "icon": "fa-database",
+    "icontype": "fa",
+    "intro": "CRM系统, 腾讯云课堂演示案例",
     "detail": "@readme.md",
     "document": "@document.md",
-    "author": "\u5317\u4eac\u4e91\u9053\u5929\u6210\u79d1\u6280\u6709\u9650\u516c\u53f8",
-    "homepage": "https://github.com/diancloud/dockerfile",
+    "author": "北京云道天成科技有限公司",
+    "homepage": "https://github.com/diancloud/taecrm",
     "menu": {
-        "defaults/index": {
-            "name": "\u6570\u636e\u5217\u8868",
-            "controller": "defaults",
-            "action": "index",
-            "permission": "boss,admin,manager,user"
+        "customersearch/index": {
+            "name": "客户检索",
+            "link": "{customersearch,index,[first:1]}",
+            "order": 1000,
+            "permission": "boss,admin,manager"
         }
     },
-    "dependencies": [],
-    "injections": [],
-    "api": [],
-    "register_api": [],
+    "dependencies": {},
+    "injections": {},
+    "api": [
+        "/team/get",
+        "/team/member/list"
+    ],
+    "register_api": {
+        "/tracking/create": {
+            "name": "创建客户追踪",
+            "controller": "TrackingAPI",
+            "action": "create",
+            "public": false
+        }
+    },
     "setup": {
         "install": {
             "controller": "setup",
@@ -32,7 +42,7 @@
         },
         "uninstall": {
             "controller": "setup",
-            "action": "upgrade"
+            "action": "uninstall"
         },
         "repair": {
             "controller": "setup",

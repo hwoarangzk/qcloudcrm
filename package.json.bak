@@ -1,0 +1,42 @@
+{
+    "name": "crm",
+    "version": "1.0.0",
+    "cname": "tuanduimao",
+    "icon": "si-puzzle",
+    "icontype": "si",
+    "intro": "\u56e2\u961f\u732b\u5e94\u7528\u6f14\u793a",
+    "detail": "@readme.md",
+    "document": "@document.md",
+    "author": "\u5317\u4eac\u4e91\u9053\u5929\u6210\u79d1\u6280\u6709\u9650\u516c\u53f8",
+    "homepage": "https://github.com/diancloud/dockerfile",
+    "menu": {
+        "defaults/index": {
+            "name": "\u6570\u636e\u5217\u8868",
+            "controller": "defaults",
+            "action": "index",
+            "permission": "boss,admin,manager,user"
+        }
+    },
+    "dependencies": [],
+    "injections": [],
+    "api": [],
+    "register_api": [],
+    "setup": {
+        "install": {
+            "controller": "setup",
+            "action": "install"
+        },
+        "upgrade": {
+            "controller": "setup",
+            "action": "upgrade"
+        },
+        "uninstall": {
+            "controller": "setup",
+            "action": "upgrade"
+        },
+        "repair": {
+            "controller": "setup",
+            "action": "repair"
+        }
+    }
+}
