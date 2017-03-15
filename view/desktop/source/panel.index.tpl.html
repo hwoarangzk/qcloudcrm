@@ -1,0 +1,77 @@
+<?php use \Tuanduimao\Loader\App as App; ?>
+<div class="block block-content remove-padding" style="height:auto;">
+    <!-- tab头部区域 -->
+    <ul  class="nav nav-tabs nav-tabs-alt">
+        <li class="active"> 
+            <a id="tabs-all" href="#tabs-content-xiangqing"  class="font-w300 tabs-menu"  data-remote="<?=App::NR('SourcePanel','read',['_id'=>$_id])?>" ><?=$title ?>
+            </a>
+        </li> 
+         <li class="pull-right noopen"> 
+            <a id="close" href="#"  class="font-w300 tabs-menu">关闭
+            </a>
+        </li> 
+    </ul>
+    <!-- tab头部区域结束 -->
+    <!-- TAB内容开始 -->
+    <div class="tab-content">
+        <div class="tab-pane hide" id="tab-pane-error" >
+            <div class="alert alert-danger push-50-l push-50-r push-20-t ">
+                <h3 class="font-w300 push-15">载入失败</h3>
+                <p>{HTML}</p>
+            </div>
+            <div class="row"  style="min-height:300px;" ></div>
+        </div>
+        
+        <!-- 右侧弹出 表单 -->
+        <div class="tab-pane active" id="tabs-content-xiangqing">
+            <!-- 修改模式管理模式切换 -->
+        	<div class="yuedutype
+                 <?php 
+                if($type=='read'){
+
+                    echo "show";
+                   
+                }?> 
+
+                <?php 
+                if($type=='update'){
+
+                    echo "hide";
+                   
+                }?>">
+        		<?=App::NRUN('SourcePanel','read',['_id'=>$_id])?>
+        	</div>
+        	<div class="hide <?php 
+
+                if($type=='update'){
+
+                    echo "show";
+                   
+                }?> 
+
+                <?php 
+                if($type=='read'){
+
+                    echo "hide";
+                   
+                }?> xiugaitype">
+        		<?=App::NRUN('SourcePanel','modify',['_id'=>$_id])?>
+        	</div>
+            <!-- 右侧弹出表单结束 -->
+        </div>
+        <div class="tab-pane" id="tabs-content-label"></div>
+    </div>
+</div>  
+<script>
+    // 初始化表单
+    $(function(){
+        App.initHelper('nav-tabs', {'id':'.nav-tabs-alt'});
+    })
+    // 关闭弹出
+    $(function(){
+        $('#close').click(function(){
+            $('#window-left').close();
+        });
+    })
+
+</script>

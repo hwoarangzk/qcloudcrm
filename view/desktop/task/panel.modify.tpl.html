@@ -1,0 +1,315 @@
+<?php use \Tuanduimao\Loader\App as App; ?>
+<div class="content">
+   <form class="form-horizontal push-10-t js-panel-updata" action="<?=App::NR('TaskData','save')?>" method="post"> 
+        <div class="form-group">
+            <!-- 任务名称 -->
+            <div class="col-sm-6">
+                <div class="form-material">
+                    <input class="form-control" type="text" id="name" name="name" placeholder="请填写任务名称" value="<?=!empty($data['name'])?$data['name']:"" ?>" >
+                    <label for="material-text">任务名称 <span class="mustbe">*</span></label>
+                </div>
+            </div>
+
+            <input type="text" name="_id" class="hide" value="<?=!empty($data['_id'])?$data['_id']:"" ?>">
+            <!-- 发送类型 -->
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <div class="form-material">
+                            <select class="form-control message-type" id="val-skill" name="val-skill">
+                                <option value="mail" <?php 
+                                if ($data['type']=="mail"){
+                                    echo "selected";
+                                }?>>邮件</option>
+                                <option value="sms" <?php 
+                                if ($data['type']=="sms"){
+                                    echo "selected";
+                                }?>>短信</option>
+                            </select>
+                            <label for="material-text">邮件类型 <span class="mustbe">*</span></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+         <div class="form-group">
+                    <div class="col-sm-6">
+                        <!-- 发送范围 -->
+                        <div class="form-material">
+                            <input class="form-control" type="text" id="scope" name="scope" placeholder="请填写用户范围" value="<?=!empty($data['scope'])?$data['scope']:"" ?>">
+                            <label for="material-text">目标用户范围 （输入关键词，多个用 "," 分隔 ）<span class="mustbe">*</span></label>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <!-- 开始日期 -->
+                            <div class="col-md-12">
+                                <div class="form-material">
+                                    <input  id="ID_14714387443454429" name="data"  value="<?=!empty($date)?$date:"" ?>"
+                                    type="text"     
+                     
+                                    class="form-control"  placeholder="<?php echo date('Y-m-d',time());?>"  
+                                    data-date-format="yyyy-mm-dd">
+                                    <label class="title" for="mediaTitle">开始日期 <span class="mustbe">*</span></label>
+                                </div>
+                            </div>
+                            <!-- 开始日期结束 -->
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <div class="form-material">
+                                <input id="expires_at" name="time" id="time" class="js-masked-datetime form-control" placeholder="HH:ii:ss" type="text" aria-invalid="false" value="<?=!empty($time)?$time:"" ?>">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+        <div class="form-group">
+            <!-- 任务名称 -->
+            <div class="col-sm-10">
+                <div class="form-material">
+                    <input class="form-control" type="text" id="title" name="title" placeholder="请填写任务名称" value="<?=!empty($data['title'])?$data['title']:"" ?>">
+                    <label for="material-text">任务名称 <span class="mustbe">*</span></label>
+                </div>
+            </div>
+            <!-- 素材库中选择 -->
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <span style="color:#337ab7;cursor:pointer" data-toggle="modal" data-toggle="block-group" data-block="#material-create" class="open">从素材库中选择&nbsp;>>></span>
+                    </div>
+                </div>
+            </div>
+            <!-- 素材选择 -->
+        </div>
+
+        <!-- 正文 -->
+        <div class="form-group">
+            <div class="col-xs-12">
+                <div class="form-material">
+                    <pre id="editormod" style="height:400px;" name="content"><?=!empty($data['content'])?$data['content']:"" ?></pre>
+                    <label for="material-textarea-large">正文 <span class="mustbe">*</span></label>
+                </div>
+            </div>
+        </div>
+        <!-- 按钮区域 -->
+        <div class="form-group">
+            <div class="col-xs-12">
+                <div class="col-xs-3">
+                     <div class="form-material">
+                        <button class="btn btn-minw btn-primary pull-left" type="submit">保存</button>
+                    </div> 
+                </div>
+                <div class="col-xs-4 pull-right">
+                     <div class="form-material">
+                        <button class="btn btn-minw btn-primary pull-right change-type content-yuedu" type="button">阅读模式</button>
+                    </div> 
+                </div>
+            </div>
+        </div>
+        <!-- 按钮区域结束 -->
+    </form>
+</div>
+
+<!-- ace编辑器载入 -->
+<script src="<?=APP::$APP_HOME_STATIC?>/static/js/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+var editor = ace.edit("editormod");
+editor.setTheme("ace/theme/twilight");
+editor.session.setMode("ace/mode/markdown");
+editor.setShowPrintMargin(false);
+$(function(){
+    // 打开发送任务(修改)
+    $('.open').click(function(){
+        $.post("<?=App::NR('TaskPanel','select')?>",{type:'mod'},function(data) {
+                $('#right-sencond').open();
+                $('#right-sencond').html(data);
+        });
+    })
+})
+$(function(){
+    App.initHelpers(['masked-inputs','tags-inputs','select2','ajax-confirm','ajax-submit']);
+    $('.js-masked-datetime').mask("99:99:99",{placeholder:"HH:ii:ss"});
+})
+$(function () {
+    // 设定 DatePicker Option
+    jQuery.fn.datepicker.dates['zh-cn'] = {
+        days: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"],
+        daysShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
+        daysMin: ["日", "一", "二", "三", "四", "五", "六"],
+        months: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+        monthsShort: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+        today: "今天",
+        clear: "清空",
+        format: "yyyy-mm-dd",
+        titleFormat: "yyyy-mm", /* Leverages same syntax as 'format' */
+        weekStart: 1
+    };
+    
+    
+    // 初始化 ID_14714387443454429 (#ID_14714387443454429) DatePicker
+    try{ 
+        jQuery('#ID_14714387443454429').datepicker({
+            weekStart: 1,
+            autoclose: true,
+            todayHighlight: true,
+            language:'zh-cn'
+        });
+    }catch(e){
+        console.log('DatePicker(ID_14714387443454429)  Error:',  e);
+    }
+});
+$(function(){
+    $('.content-yuedu').click(function(event){
+        $('.yuedutype').removeClass('hide');
+        $('.xiugaitype').removeClass('show');
+        $('.yuedutype').addClass('show');
+        $('.xiugaitype').addClass('hide');
+    });
+})
+$(function(){
+       
+    $('.js-panel-updata').validate({
+            errorClass: 'help-block text-right animated fadeInDown',
+            errorElement: 'div',
+            errorPlacement: function(error, e) {                
+                jQuery(e).parents('.form-group .form-material').append(error);
+            },
+            highlight: function(e) {
+                jQuery(e).closest('.form-group .form-material').parent().removeClass('has-error').addClass('has-error');
+                jQuery(e).closest('.help-block').remove();
+            },
+            unhighlight:function(e){
+                jQuery(e).closest('.form-group .form-material').parent().removeClass('has-error');
+                jQuery(e).closest('.help-block').remove();
+            },
+            success: function(e) {
+                jQuery(e).closest('.form-group .form-material').parent().removeClass('has-error');
+                jQuery(e).closest('.help-block').remove();
+            },
+
+            submitHandler: function(form) {
+
+                var self = this;
+                // 把from提交的内容进行截断,调用UserDataSubmit方法;
+                DataSubmit(self,form,function callback(){
+                    App.notify( '操作成功' );
+                    App.loading().hide();
+                });
+            },
+            rules: {
+                type : "required",
+                'name': {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 200,
+                },
+                'scope': {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 20000,
+                },
+                'data' : {
+                    required: true,
+                },
+                'time' : {
+                    required: true,
+                },
+                'title': {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 200,
+                },
+
+              
+            },
+            
+            messages: {
+                type : "请选择类型",
+                'name': {
+                    required: '请填写标题名',
+                    minlength: '标题名不能少于2个字',
+                    maxlength: '标题名不能超过200个字',
+                },
+                'scope': {
+                    required: '请填写标目标用户范围',
+                    minlength: '目标用户范围不能少于2个字',
+                    maxlength: '目标用户范围不能超过200个字',
+                },
+                'data' : {
+                    required: '请填写用户日期',
+                },
+                'time' : {
+                    required: '请填写时间',
+                },
+                'title': {
+                    required: '请填写标题',
+                    minlength: '标题不能少于2个字',
+                    maxlength: '标题不能超过200个字',
+                },
+            },
+        });
+
+    })
+
+
+    /**
+     * 提交表单 
+     * @param {[type]} validation [description]
+     * @param {[type]} form       [description]
+     */
+    function DataSubmit( validation, form , callback ) {
+
+        var api = $(form).attr('action');
+        var next = $(form).attr('data-next');
+        var submits = $('button[type="submit"]', form);
+
+        // 如果开始提交disabled提交按钮
+        $(submits).attr('disabled', 'disabled');
+        $(submits).addClass('disabled');
+
+        var data = {};
+
+        // 序列化查询数据
+        var formData =  $(form).serializeArray();
+        for( var i=0; i<formData.length; i++ ) {
+            var name = formData[i]['name'];
+            var value = formData[i]['value'];
+
+            if (value !== "") {
+                data[name] = value;
+            }
+        }
+
+        
+        // markdown数据进行数据处理
+        data['content'] = editor.getValue();
+        
+        data = jQuery.extend(data, {});
+
+        // 提交表单  
+       $.post( api, data, function(data, textStatus, xhr) {
+
+            $(submits).removeAttr('disabled');
+            $(submits).removeClass('disabled');
+
+            if (data['result']==false){
+
+                App.notify( '操作失败'+data['content'], 'fa fa-times','danger');
+                return;
+            };
+            callback();
+            return;
+
+        },'json')
+
+    }
+</script>
+<style>
+    .mustbe{
+        color: red;
+    }
+</style>

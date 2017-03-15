@@ -1,0 +1,200 @@
+<?php use \Tuanduimao\Loader\App as App; ?>
+<!DOCTYPE html>
+<html>
+<head>
+<?php include_once(APP::tpl('mobile/common/head')); ?>
+<style>
+	.list-block .item-title.label{
+
+		margin-left:1rem;
+
+	}
+	
+	.list-block .item-media+.item-inner {
+	   margin-left: 0.05rem;
+	}
+
+	.bar-header-secondary~.content {
+		top: 3.4rem;
+	}
+
+  .list-block ul {
+    background: #e7e7e7;
+    width:100%;
+  }
+
+  .card-content-inner {
+    padding: .75rem;
+  }
+
+
+  .list-block .item-content {
+    padding-left: 0.1rem;
+  }
+  .card{
+    width: 100%;
+  }
+  .card-content-inner{
+    height: 120px;
+  }
+  .row {
+      overflow: hidden;
+      margin-left: 0%;
+      margin-top: 15px;
+      width: 100%;
+  }
+  .float-right{
+    float: left;
+  }
+
+  .float-left{
+    float: right;
+  }
+  .float-top{
+    margin-top: 15px;
+  }
+  .float-bot{
+    margin-top: 5px;
+  }
+
+
+</style>
+</head>
+<body>
+<div class="page-group">
+	<div class="page page-current">
+		<!-- head开始 -->
+		<header class="bar bar-nav">
+		  	<h1 class='title'>客户检索</h1>
+		</header>
+		<!-- head结束 -->
+		
+		<!-- 底部导航 -->
+		<nav class="bar bar-tab">
+			<!-- 跳转到首页 -->
+		  	<a class="tab-item external" href="<?=App::PR('MobCustomerPanel','index')?>">
+		    	<span class="icon icon-computer"></span>
+		  	</a>
+		  	<a class="tab-item external create-actions" href="#">
+		    	 <i class="icon iconfont">&#xe600;</i>
+		  	</a>
+			<!-- 跳转到客户检索 -->
+			<a class="tab-item external" href="<?=App::PR('MobCustomerSearch','find')?>">
+			    <span class="icon icon-menu"></span>
+			</a>
+		</nav>
+		<!-- END 底部导航 -->
+
+
+		<!-- 搜索开始 -->
+		<div class="bar bar-header-secondary">
+		  <div class="searchbar">
+		    <a class="searchbar-cancel">取消</a>
+		    <div class="search-input">
+		      	<label class="icon icon-search" for="search"></label>
+		      	<input type="search" id='search' placeholder='输入关键字...' class="serch-button"/>
+		    </div>
+		  </div>
+		</div>
+		<!-- seek结束 -->
+		<!-- 默认开始data-distance距离底部开始触发，默认是50 (px) -->
+	 <div class="content infinite-scroll infinite-scroll-bottom" data-distance="100">
+	        <div class="list-block">
+  		        <ul class="list-container">
+
+              </ul>
+	        </div>
+		</div>
+    <div class="page"></div>
+		<!-- 默认结束 -->
+        <!-- 加载提示符 -->
+     	  <div class="infinite-scroll-preloader">
+          	<div class="preloader"></div>
+      	</div>
+      	<!-- 加载内容结束	 -->
+	</div>
+</div>
+
+<?php include_once(APP::tpl('mobile/common/foot')); ?>
+<script type="text/javascript">
+
+
+  // 首先加载5条
+  $(function(){
+      $(".page").data('page','1');
+      var page = $(".page").data('page');
+      var url = "<?=App::NR('MobCustomerData','find')?>";
+      // 首先加载5条
+       $.ajax({
+        type: 'post',
+        url: url,
+        data: {page:page},
+        dataType: 'json',
+        success: function(data){
+          $('.list-container').html(data['html']);  
+        },
+      })
+  })
+
+  $(function(){
+      // 设置默认page为1
+      $(document).keypress(function(e) {  
+          // 回车键事件  
+          if(e.which == 13) { 
+              var reset = $(this).val();
+              var url = "<?=App::NR('MobCustomerData','find')?>";
+              var keyword = $('#search').val();
+
+              $.ajax({
+                 type: 'post',
+                 url: url,
+                 data: {reset:reset,keyword:keyword},
+                 dataType: 'json',
+                 success: function(data){
+                    $('.list-container').html(data['html']);
+                    $(".page").data('page',data['page']);
+                 },
+              })
+          }  
+      });
+      var loading = false;
+      $(document).on('infinite','.infinite-scroll-bottom',function() {
+            // 模拟1s的加载过程
+                if (loading) return;
+                var url = "<?=App::NR('MobCustomerData','find')?>";
+                var page = parseInt($(".page").data('page'))+1;
+                loading = true;
+                var keyword = $('#search').val();
+                $.ajax({
+                    type: 'post',
+                    url: url,
+                    data: {keyword:keyword,page:page},
+                    dataType: 'json',
+                    success: function(data){
+                      $(".page").data('page',data['cur']);
+                      $('.list-container').append(data['html']);
+                      if (data['html']==null) {
+                          //加载完毕，则注销无限加载事件，以防不必要的加载
+                          $.detachInfiniteScroll($('.infinite-scroll'));
+                          // 删除加载提示符
+                          $('.infinite-scroll-preloader').remove();
+                          return;
+                      }
+                     // 重置加载flag
+                      loading = false;
+
+                    },
+              });
+       $.init();
+	 })	
+})
+</script>
+</body>
+</html>
+<style>
+  .content-all{
+    width:100%;
+    height: 100px;
+    display: block;
+  }
+</style>

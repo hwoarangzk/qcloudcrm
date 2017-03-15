@@ -1,0 +1,191 @@
+<?php use \Tuanduimao\Loader\App as App; ?>
+<div class="block block-content remove-padding" style="height:auto;">
+    <!-- tab头部区域 -->
+    <!-- 阅读模式 -->
+    <ul class="nav nav-tabs nav-tabs-alt">
+        <li class="active"> 
+            <a id="tabs-all" href="#"  class="font-w300 tabs-menu"  data-remote=""><i class="fa  fa-th-list push-5-r"></i>选择素材</a>
+        </li> 
+        <li class="font-w300 tabs-menu pull-right" id ="close">
+            <a id="tabs-document" href="#"  class="font-w300 tabs-menu">关闭
+            </a>
+        </li> 
+    </ul>
+    <!-- tab头部区域结束 -->
+    <!-- TAB内容开始 -->
+    <div class="tab-content">
+        <div class="tab-pane hide" id="tab-pane-error" >
+            <div class="alert alert-danger push-50-l push-50-r push-20-t ">
+                <h3 class="font-w300 push-15">载入失败</h3>
+                <p>{HTML}</p>
+            </div>
+            <div class="row"  style="min-height:300px;" ></div>
+        </div>
+        <!-- 右侧弹出 表单 -->
+        <div class="tab-pane active" id="tabs-content-xiangqing">
+        	<div class="content">
+	            <!-- 客户列表 表单 -->
+                <input type="text" value="<?=!empty($type)?$type:""?>" class="type_data hide">
+                <div class="tab-pane active active-sec" id="tabs-content-all">
+                    <!-- 列表页 -->
+                    <table class="js-table-checkable table table-hover remove-margin">
+                        <thead>
+                            <tr>
+                                <th class="text-center" style="width:10%;">
+                                    <label class="css-input css-checkbox css-checkbox-primary remove-margin-t remove-margin-b">
+                                        <span>编号</span>
+                                    </label>
+                                </th>
+                                <th class="font-w300" style="width:45%;min-width:200px;">标题</th>
+                                <th class="font-w300" style="width:20%;">类型</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        	<!-- ["type"] -->
+						<?php foreach ($data as $message) :?>
+							<tr data-toggle="block-group" class="tr_chose">
+                                <td class="text-center">
+                                    <input class="_id hide"  value="<?=!empty($message['_id'])?$message['_id']:""?>">
+                                    <label class="css-input css-checkbox css-checkbox-primary">
+                                      <span>
+                                      		<?=!empty($message['id'])?$message['id']:""?>
+                                      </span>
+                                    </label>
+                                </td>
+                                <td><?=!empty($message['title'])?$message['title']:""?></td>
+                                <td><?php  
+                                        if ($message['type']=="sms") {
+
+                                        	echo "信息";
+                                        	
+                                        }
+
+                                        if ($message['type']=="mail") {
+                                        		
+                                        	echo "邮件";
+                                    }?></td>
+                            </tr>
+                        <?php endforeach; ?>
+						</tbody>
+                        <tfoot>
+                            <tr><td colspan="6">
+                                <nav class="pull-right">
+                                    <ul class="pagination ">
+                                        <li class="current_left 
+                                            <?php 
+                                                if ($page=="1"){
+
+                                                    echo "hide";
+                                                    
+                                            } ?>">
+                                            <a href="#"><i class="fa fa-angle-double-left"></i></a>
+                                        </li>
+                                        <?php foreach ($pageall as $vv) :?>
+										<li  class="
+											<?php 
+												if ($vv==$page){
+
+													echo "active current_this";
+												 	
+											} ?>  current_page">
+                                            <a href="#"><?=!empty($vv)?$vv:""?></a>
+                                        </li>
+                                    	<?php endforeach; ?>
+                                        <li class="current_right  <?php 
+                                                if ($page==$last_page){
+
+                                                    echo "hide";
+                                                    
+                                            } ?>">
+                                            <a href="#"><i class="fa fa-angle-double-right"></i></a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </td></tr>
+                        </tfoot>
+                    </table>
+                    <!-- 列表页结束 -->
+                </div>
+             <!-- 客户列表表单结束 -->
+         	</div>
+		</div>
+        <!-- 右侧弹出表单结束 -->
+    </div>
+</div> 
+<!-- ace编辑器载入  -->
+<script src="<?=APP::$APP_HOME_STATIC?>/static/js/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    $(function(){
+        // 点击关闭窗口
+        App.initHelper('nav-tabs', {'id':'.nav-tabs-alt'});
+        $('#close').click(function(event) {
+            $('#right-sencond').close();
+        });
+    })
+</script>
+<script>
+    // 页数点击
+    function current_page(){
+        $('.current_page').click(function(){
+            var page = $(this).find('a').html();
+            App.loading({message:'正在加载...'}).show();
+            $.post("<?=App::NR('TaskPanel','selectpage')?>", {page: page}, function(data) {
+                     App.loading().hide();
+                    $('.active-sec').empty().html(data);
+
+            });
+        });
+    }
+    // 左侧点击
+    function current_left(){
+        
+        $('.current_left').click(function(){
+            var page = $('.current_this').find('a').html();
+            var page = page-1;
+            App.loading({message:'正在加载...'}).show();
+            $.post("<?=App::NR('TaskPanel','selectpage')?>", {page: page}, function(data) {
+                     App.loading().hide();
+                    $('.active-sec').empty().html(data);
+
+            });
+        });
+    }
+    // 右侧点击
+    function current_right(){
+        $('.current_right').click(function(){
+            var page = $('.current_this').find('a').html();
+            var page =  parseInt(page)+parseInt(1);
+            App.loading({message:'正在加载...'}).show();
+            $.post("<?=App::NR('TaskPanel','selectpage')?>", {page: page}, function(data) {
+                     App.loading().hide();
+                    $('.active-sec').empty().html(data);
+
+            });
+        }); 
+    }
+    // 选择关闭
+    function choose_close(){
+        $('.tr_chose').click(function(){
+            var _id = $(this).find('._id').val();
+            $.post("<?=App::NR('TaskPanel','chooseid')?>", {_id: _id}, function(data){
+                var message = data.type;
+                $(".message-type").val(message);
+                var editor = $('#editor');
+                var active =  $('.type_data').val();
+                if (active=="mod") {
+                    var editor = ace.edit("editormod");
+                }else{
+                    var editor = ace.edit("editor");
+                };
+                editor.setValue(data.content);
+                $("#title").val(data.title);
+                $('#right-sencond').close();
+            },'json');
+        });
+    }
+    current_page();
+    current_right();
+    current_left();
+    choose_close();
+</script>
+

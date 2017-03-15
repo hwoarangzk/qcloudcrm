@@ -1,0 +1,215 @@
+
+<?php use \Tuanduimao\Loader\App as App; ?>
+<!DOCTYPE html>
+<html>
+<head>
+<?php include_once(APP::tpl('mobile/common/head')); ?>
+<style>
+		.list-block .item-title.label{
+
+			margin-left:1rem;
+		}
+		.list-block .item-media+.item-inner {
+		   margin-left: 0.05rem;
+		}
+		.bar-header-secondary~.content {
+			top: 2.4rem;
+		}
+		.list-block ul {
+		    background: #e7e7e7;
+		    width:100%;
+		}
+
+		.card-content{
+		    height: 120px;
+		    margin-left:-10px;
+		}
+		.margin-top{
+
+			margin-top: 30px;
+		}
+		.margin-letf{
+			position: relative;
+			right:-25px;
+			word-break:break-all;
+			text-align: left;
+		}	
+		.margin-letf span{
+			float: left;
+		}
+		.margin-letf i{
+			float: left;
+		}
+		.margin-top-right{
+			margin-top: 45px;
+		}
+		.card{
+		    width: 100%;
+		}
+		.list-block .item-content {
+		    padding-left: 0.1rem;
+		}
+</style>
+</head>
+
+<body>
+<div class="page-group">
+	<div class="page page-current">
+		<!-- 头部切换 -->
+		<header class="bar bar-nav">
+			<p class="buttons-row" style="margin-top:3px;">
+				<a href="<?=App::PR('MobCustomerPanel','read',['_id'=>$_GET['_id']])?>" class="button" external>详情</a>
+			  	<a href="<?=App::PR('MobMarking','index',['_id'=>$_GET['_id']])?>" class="button active" external>标注</a>
+			  	<a href="<?=App::PR('MobTracking','index',['_id'=>$_GET['_id']])?>" class="button" external>追踪</a>
+			</p>
+		</header>
+		<!-- 头部切换结束 -->
+		
+		<!-- 搜索栏开始 -->
+		<div class="bar bar-header-secondary">
+			<div class="searchbar">
+				<a class="searchbar-cancel">取消</a>
+				<div class="search-input">
+				  <label class="icon icon-search" for="search"></label>
+				  <input type="search" id='search' placeholder='输入关键字...'/>
+				</div>
+			</div>
+		</div>
+		<!-- 搜索栏结束 -->
+
+		 <div class="content infinite-scroll infinite-scroll-bottom" data-distance="100">
+	        <div class="list-block">
+		        <ul class="list-container">
+
+		        	
+				
+				</ul>
+	        </div>
+		</div>
+		
+		<div class="infinite-scroll-preloader">
+              	<div class="preloader"></div>
+        </div>
+		<!-- 底部搜索栏目开始 -->
+		<nav class="bar bar-tab">
+			<div class="searchbar row">
+			    <div class="search-input col-85">
+			      <input type="search" id='search' placeholder='请输入标记内容' class="message-biaozhu"/>
+			    </div>
+			    <a class="button button-fill button-primary col-15 add-biaozhu" style="margin-top:-6px;margin-left:10px;"><span class="icon icon-message"></span></a>
+  			</div>
+		</nav>
+		<!-- 底部搜索栏结束 -->
+
+	</div>
+</div>
+
+</body>
+</html>
+<?php include_once(APP::tpl('mobile/common/foot')); ?>
+<script>
+	$(function(){
+		$('.add-biaozhu').click(function(){
+
+			var content =  $('.message-biaozhu').val();
+			var _id  = "<?=$_GET['_id']?>";
+			if (content==""){
+
+				alert('标注不得为空');
+				return;
+			};
+			$.post("<?=App::PR('Mobmarking','save')?>", {_id:_id,content:content}, function(data) {
+					if(data.errmsg=='succ') {
+
+						 $.alert( '添加标注成功');
+						 window.location.reload(); 
+
+					}else{
+
+						 $.alert('标注失败,'+data['message']);
+
+					}
+			},'json');
+		});
+	})
+</script>
+<script>
+	  // 首先加载5条
+  	$(function(){
+      $(".page").data('page','1');
+      var page = $(".page").data('page');
+      var url = "<?=App::NR('MobMarking','page')?>";
+      var _id = "<?=$_GET['_id']?>";
+
+      // 首先加载5条
+       $.ajax({
+                type: 'post',
+                url: url,
+                data: {_id:_id},
+                dataType: 'json',
+                success: function(data){
+
+                  	$('.list-container').append(data['html']);
+             	}
+        })
+  	})
+	$(function(){
+		// 设置默认page为1
+	    $(document).keypress(function(e) {  
+	          // 回车键事件  
+	          if(e.which == 13) { 
+	          	$(".page").data('page','1');
+	            var _id = "<?=$_GET['_id']?>";
+	            var url = "<?=App::NR('MobMarking','page')?>";
+	            var searchmessage = $('#search').val();
+
+				$.ajax({
+	                 type: 'post',
+	                 url: url,
+	                 data: {searchmessage:searchmessage,_id:_id},
+	                 dataType: 'json',
+	                 success: function(data){
+
+	                    $('.list-container').html(data['html']);
+	                    $(".page").data('page',data['page']);
+	                },
+	              })
+	          }  
+	    });
+
+	    var loading = false;
+	    $(document).on('infinite','.infinite-scroll-bottom',function() {
+	        // 模拟1s的加载过程
+            if (loading) return;
+
+            var url = "<?=App::NR('MobMarking','page')?>";
+            var _id = "<?=$_GET['_id']?>";
+			var page = parseInt($(".page").data('page'))+1;
+
+            loading = true;
+
+            var keyword = $('#search').val();
+            $.ajax({
+                type: 'post',
+                url: url,
+                data: {keyword:keyword,page:page,_id:_id},
+                dataType: 'json',
+                success: function(data){
+				$(".page").data('page',data['cur']);
+               	$('.list-container').append(data['html']);
+				if(data['html']==null) {
+                      //加载完毕，则注销无限加载事件，以防不必要的加载
+                      $.detachInfiniteScroll($('.infinite-scroll'));
+                      // 删除加载提示符
+                      $('.infinite-scroll-preloader').remove();
+                      return;
+                }
+	                 // 重置加载flag
+	                 loading = false;
+				},
+  			});
+	    $.init();
+		})
+
+	})
+</script>

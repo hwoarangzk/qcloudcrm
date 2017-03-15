@@ -1,0 +1,320 @@
+<?php use \Tuanduimao\Loader\App as App; ?>
+<!-- 单行搜索框 开始 -->
+<!-- Page Content -->
+<div class="content">
+    <form class="js-form-search" action="" method="post">
+       <!-- Search Section -->
+        <div class="block block-transparent">
+            <div class="row" >
+                <div  class="col-lg-8 col-md-8 col-sm-8">
+                    
+                    <div class="input-group input-group-lg">
+                        <div class="input-group-addon font-w300"> 全文检索 </div> 
+                        <input class="js-icon-search form-control search-content" type="text" placeholder="输入关键词">
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary font-w300 sourdimsearch" type="button"><i class=" si si-magnifier"></i> 搜索 </button>
+                        </span>
+                    </div>
+                    
+                </div>
+                <div class="col-lg-4 col-md-4  col-sm-4">
+                    <button class="btn btn-primary btn-lg font-w300 pull-right data-create data-create-material" 
+                        data-toggle-open="block-group"
+                        type="button" data-toggle="block-group" data-block="#customer-create"><i class="fa fa-magic"></i> 创建素材 </button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <!-- search结束 -->
+    <div class="block-group">
+        <!-- 添加素材 -->
+        <div 
+            id="customer-create"
+            class="block block-slider block-left " 
+            data-offset='80'
+            option-autoclose='0'
+            option-duration='800'
+            style="margin:0px;" 
+            >
+        </div> 
+        <!-- 添加素材结束 -->
+        <!-- 右侧弹出窗口 -->
+        <div 
+            id="window-left"
+            class="block block-slider block-left " 
+            data-offset='80'
+            option-autoclose='0'
+            option-duration='800'
+            style="margin:0px;" 
+        >
+        </div> 
+        <!-- 右侧弹出end -->
+        <div class="block">
+            <!-- 素材开始 -->
+            <ul class="nav nav-tabs nav-tabs-alt" data-toggle="tabs">
+                <li class="active"> 
+                    <a id="tabs-document" href="#tabs-content-all"  class="font-w300 tabs-menu"> 
+                       <i class="fa  fa-th-list push-5-r"></i>素材列表
+                    </a>
+                </li> 
+                <li class="pull-right">
+                    <a href="#" type="button" class="except" data-toggle="block-option" data-action="fullscreen_toggle"></a>
+                </li> 
+            </ul>
+            <!-- TAB内容开始 -->
+            <div class="block-content tab-content">
+                <div class="tab-pane hide" id="tab-pane-error" >
+                    <div class="alert alert-danger push-50-l push-50-r push-20-t ">
+                        <h3 class="font-w300 push-15">载入失败</h3>
+                        <p>{HTML}</p>
+                    </div>
+                    <div class="row"  style="min-height:300px;" ></div>
+                </div>
+                <div class="tab-pane active" id="tabs-status-0">
+                    <div class="row items-push remove-margin">
+                        <?php if(empty($data)):?>
+                            <span>对不起，没有找到或者客户没有创建</span>
+                        <?php else: ?>
+                        <div class="col-xs-7">
+                            <span class="text-muted font-s13"> 共找到<?=$total?>条 符合条件的数据</span>
+                        </div>
+                        <div class="col-xs-5">
+                            <div class="btn-toolbar pull-right text-center" role="toolbar">
+                                <!-- 排序 -->
+                                <div class="btn-group" role="group">
+                                    <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown"> 
+                                        <i class="glyphicon glyphicon-sort-by-order"></i> 创建时间  <span class="caret"></span> 
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-left">
+                                        <li class="dropdown-header">请选择排序方式</li>
+                                        <li>
+                                            <a tabindex="-1" href="<?=App::R('SourceSearch','index',['page'=>'1','keyword'=>$keyword,'order'=>'ct','mode'=>'rw'])?>">
+                                               <i class="glyphicon glyphicon-sort-by-order"></i> 创建时间升序
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a tabindex="-1" href="<?=App::R('SourceSearch','index',['page'=>'1','keyword'=>$keyword,'order'=>'ct_asc','mode'=>'rw'])?>">
+                                               <i class="glyphicon glyphicon-sort-by-order-alt"></i> 创建时间降序
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a tabindex="-1" href="<?=App::R('SourceSearch','index',['page'=>'1','keyword'=>$keyword,'order'=>'name','mode'=>'rw'])?>">
+                                               <i class="glyphicon glyphicon-sort-by-order"></i> 姓名升序
+                                            </a>
+                                        </li>
+                                         <li>
+                                            <a tabindex="-1" href="<?=App::R('SourceSearch','index',['page'=>'1','keyword'=>$keyword,'order'=>'name_asc','mode'=>'rw'])?>">
+                                               <i class="glyphicon glyphicon-sort-by-order-alt"></i> 姓名降序
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!-- 排序结束 -->
+                                <!-- 模式切换 -->
+                                <div class="btn-group" role="group">
+                                    <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" > 
+                                        <i class="glyphicon glyphicon-cog"></i>管理模式<span class="caret"></span> 
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li class="dropdown-header">请选择呈现模式</li>
+                                        <li class="read">
+                                            <a tabindex="-1" href="<?=App::R('SourceSearch','index',['page'=>'1','keyword'=>$keyword,'order'=>'name','mode'=>"r"])?>">
+                                               <i class="glyphicon glyphicon-list-alt"></i> 阅读
+                                            </a>
+                                        </li>
+                                        <li class="manage">
+                                            <a tabindex="-1" href="<?=App::R('SourceSearch','index',['page'=>'1','keyword'=>$keyword,'order'=>'name','mode'=>"rw"])?>">
+                                               <i class="glyphicon glyphicon-cog"></i> 管理
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!-- 模式切换结束 -->
+                            </div>
+                        </div>
+                        <!-- 客户列表 表单 -->
+                        <div class="tab-pane active" id="tabs-content-all">
+                            <!-- 列表页 -->
+                            <table class="js-table-checkable table table-hover remove-margin">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" style="width:5%;">
+                                            <label class="css-input css-checkbox css-checkbox-primary remove-margin-t remove-margin-b">
+                                                <span>编号</span>
+                                            </label>
+                                        </th>
+                                        <th class="font-w300" style="width:45%;min-width:200px;">标题</th>
+                                        <th class="font-w300" style="width:20%;">类型</th>
+                                    </tr>
+                                </thead>
+                                <!-- 内容区域 -->
+                                <tbody>
+                                    <?php foreach ($data as $message) :?>
+                                    <tr>
+                                        <td class="text-center" >
+                                            <label class="css-input css-checkbox css-checkbox-primary">
+                                                <span><?=!empty($message['num'])?$message['num']:""?></span>
+                                            </label>
+                                        </td>
+                                        <td><?=!empty($message['title'])?$message['title']:""?></td>
+                                        <td>
+                                            <button  class="btn btn-sm manage-xiugai"  type="sbutton" data-toggle="block-group" data-block="#window-left" value="<?=$message['_id']?>">修改</button>
+                                            <button  class="btn btn-sm btn-danger push-20-r ajax-confirm mobadminxiugai" type="button"    
+                                            confirm-title="您确定要删除<?=!empty($message['title'])?$message['title']:""?>吗？"
+                                            confirm-content="请确认删除用户[<?=!empty($message['title'])?$message['title']:""?>]，该操作不可恢复！"
+                                            confirm-modal = "HHD"
+                                            confirm-dismiss = "取消删除"
+                                            confirm-submit= "确认删除"
+                                            confirm-action="<?=App::NR('SourceData','dalete')?>"
+                                            data-param-id="<?=$message['_id']?>" 
+                                            data-param-data="PARMAMID"> 删除</button>
+
+                                            <input class="hide _id" value="<?=!empty($message['_id'])?$message['_id']:""?>"></td>
+                                    </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                                <!-- 内容区域结束 -->
+                                <!-- 分页开始 -->
+                                <tfoot>
+                                    <tr><td colspan="6">
+                                        <nav class="pull-right">
+                                            <ul class="pagination ">
+                                                <li class="<?php 
+                                                    if ($pre==NULL) {
+                                                        echo "hide";
+                                                    }
+
+                                                 ?>">
+                                                    <a href="<?=App::R('SourceSearch','index',['keyword'=>$keyword,'order'=>$order,'mode'=>'rw']).$pre?>"><i class="fa fa-angle-double-left"></i></a>
+                                                </li>
+                                                <?php foreach ($page as $num) :?>
+                                                <li  class="
+                                                    <?php if ((int)($num)===$cur) {
+
+                                                        echo "active";
+                                                           
+                                                        }?>">
+                                                    <a href="<?=App::R('SourceSearch','index',['page'=>$num,'keyword'=>$keyword,'order'=>$order,'mode'=>'rw'])?>"><?=$num;?></a>
+                                                </li>
+                                                <?php endforeach; ?>
+                                                <li class="<?php 
+                                                    if ($next==NULL) {
+                                                        echo "hide";
+                                                    }?>">
+                                                    <a href="<?=App::R('SourceSearch','index',['keyword'=>$keyword,'order'=>$order,'mode'=>'rw']).$next?>"><i class="fa fa-angle-double-right"></i></a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </td></tr>
+                                </tfoot>
+                                <!-- 分页结束 -->
+                                <?php endif ?>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    // 初始化表单
+    $(function(){
+
+        App.initHelpers([ 'select2', 'slimscroll','ajax-confirm', 'ajax-submit','tab','block-group']);
+        $('.mobadminxiugai').on('success', function(event,data){
+            // 判断是否成功
+            if (data==true) {
+                App.notify( '删除成功' );
+                }else{
+                App.notify( '删除失败', 'fa fa-times','danger');   
+            };
+        });
+    })
+
+    // 防止重复启动
+    $(function(){
+        $('.data-create').click(function(event) {
+            $('#window-left').close();
+        });
+    })
+
+    /**
+     * 搜索方法
+     * @return {[type]} [description]
+     */
+    $(function(){
+        // 搜索按钮点击
+         $('.sourdimsearch').click(function(){
+            sourseek();
+        });
+    })
+
+    // 提交get请求
+    function sourseek(){
+       // 获取查询内容
+        var keyword =  $('.search-content').val();
+        var url ="<?=App::R('SourceSearch','index',['page'=>'1','type'=>'rw','order'=>'ct','keyword'=>""])?>"+keyword; 
+         window.location.href=url; 
+    }
+
+    // 删除
+    $(function(){
+        $('.mobadminxiugai').on('success', function(event,data){
+                // 判断是否成功
+                if (data==true) {
+
+                    App.notify( '删除成功' );
+                    window.location.reload();
+                }else{
+                    App.notify( '删除失败', 'fa fa-times','danger');   
+                };
+        });
+    })
+
+    //防止重复启动
+    $(function(){
+        $('.data-create').click(function(event) {
+            $('#window-left').close();
+        });
+    })
+
+
+    // 创建弹出框
+    $(function(){
+
+        $('.data-create-material').click(function(){
+
+            $('#customer-create').remote({
+                url:"<?=App::NR('SourcePanel','create')?>",
+                // 载入页面
+                success: function( html, xhr ) {
+                    $('#customer-create').html(html);
+                },
+                // 如果报错返回错误
+                error: function( xhr, status, statusText ) {
+
+                },
+               
+            });
+        });
+        // 弹出右侧阅读栏目
+        $('.manage-xiugai').click(function(){
+
+            var _id = $(this).val();
+
+            $('#window-left').remote({
+                url:"<?=App::NR('SourcePanel','index',['type'=>'update','_id'=>''])?>"+_id,
+                // 载入页面
+                success: function( html, xhr ) {
+                    $('#window-left').html(html);
+                },
+                // 如果报错返回错误
+                error: function( xhr, status, statusText ) {
+
+                },
+           });
+        });
+    })
+    
+</script>

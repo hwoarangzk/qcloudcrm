@@ -1,0 +1,67 @@
+<?php use \Tuanduimao\Loader\App as App; ?>
+<!-- 阅读模式 -->
+<div class="content">
+	<div class="change">
+		<div class="form-horizontal push-10-t">
+      	  	<div class="tab-pane active" id="tabs-status-0">
+                <div class="row items-push remove-margin">
+                  	<!-- 预览 -->
+                   	<span id="htnl_inter"><?=!empty($data['content'])?$data['content']:""?></span>
+                   	<!-- 预览结束 -->
+            	</div>
+            	<!-- 按钮区域 -->
+				<div class="form-group">
+	                <div class="col-xs-12">
+	                    <div class="col-xs-3">
+	                         <div class="form-material">
+	                            <button class="btn btn-minw btn-primary pull-left cloese"  data-toggle-close="block-group"   data-block="#window-left">关闭窗口</button>
+	                        </div> 
+	                    </div>
+	                    <div class="col-xs-4">
+	              		</div>
+	                    <div class="col-xs-4">
+	                        <div class="form-material">
+		                        <button class="btn btn-minw btn-primary pull-right content-xiugai" type="button">修改模式</button>
+		                    </div> 
+	                    </div>
+	                </div>
+	            </div>
+	            <!-- 按钮区域结束 -->
+        	</div>
+   		</div>
+	</div>
+</div>
+<!-- markown载入 -->
+<script src="<?=APP::$APP_HOME_STATIC?>/static/js/markdown.js" type="text/javascript" charset="utf-8"></script>
+<script>
+	// markown转化为html
+	$(function(){
+		var html_echo = $('#htnl_inter').html();
+		var converter = new Showdown.converter();
+		var html_code = converter.makeHtml(html_echo);
+		$('#htnl_inter').empty().append(html_code)
+   	})
+
+	$(function(){
+		// 关闭窗口
+		$('.cloese').click(function(){
+			$('#window-left').close();
+		});
+
+		// 阅读模式切换修改模式
+		$('.content-xiugai').click(function(event) {
+			$('.yuedutype').removeClass('show');
+			$('.xiugaitype').removeClass('hide');
+			$('.yuedutype').addClass('hide');
+			$('.xiugaitype').addClass('show');
+		});
+	})
+</script>
+<style>
+#htnl_inter  img{
+        width: auto;
+        height:auto;
+        max-height: 100%;
+        max-width: 100%;
+    }
+</style>

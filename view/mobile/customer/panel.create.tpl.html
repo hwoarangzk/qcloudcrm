@@ -1,0 +1,273 @@
+<?php use \Tuanduimao\Loader\App as App; ?>
+<!DOCTYPE html>
+<html>
+<head>
+<?php include_once(APP::tpl('mobile/common/head')); ?>
+<style>
+	.list-block .item-title.label{
+
+		margin-left:1rem;
+	}
+
+	.list-block .item-media+.item-inner {
+	   margin-left: 0.05rem;
+	}
+
+	.content {
+	    position: absolute;
+	    top: 30px;
+	    right: 0;
+	    bottom: 0;
+	    left: 0;
+	    overflow: auto;
+	    -webkit-overflow-scrolling: touch;
+	}
+
+</style>
+</head>
+<body>
+<div class="page-group">
+	<div class="page page-current">
+		<header class="bar bar-nav">
+		  	<h1 class='title'>添加客户</h1>
+		</header>
+		<form action="<?=App::PR('MobCustomerData','save')?>"  method="POST" class="js-validation-CoreDeptUserForm">
+			<div class="content">
+				<div class="list-block">
+				    <ul>
+				    	<!-- 编号 -->
+					    <li>
+					    	<div class="item-media"><i class="icon icon-form-name"></i></div>
+					        <div class="item-inner left-content">
+					            <div class="item-title label margin-zt">编号</div>
+						            <div class="item-input">
+						              <input type="text" id="num" name="num">
+						            </div>
+					        </div>
+					    </li>
+					    <!-- 公司名称 -->
+					   	<li>
+				          	<div class="item-inner left-content">	
+				          		<div class="item-media"><i class="icon icon-form-name"></i></div>
+				            	<div class="item-title label margin-zt">公司名称</div>
+					            <div class="item-input">
+					              <input type="text" id="company" name="company"  placeholder="请输入">
+					            </div>
+				          	</div>
+				       	</li>
+					    <!-- 联系人 -->
+					  	<li>
+					        
+					        <div class="item-media"><i class="icon icon-form-name"></i></div>
+				          	<div class="item-inner left-content">
+				            	<div class="item-title label margin-zt">联系人</div>
+					            <div class="item-input">
+					              <input type="text"  placeholder="请输入" id="name" name="name" value="<?=!empty($_SESSION['namecard']['name'])?$_SESSION['namecard']['name']:''?>">
+					            </div>
+				          	</div>
+					    </li>
+					    <!-- 职务 -->
+					   	<li>
+					        
+					        <div class="item-media"><i class="icon icon-form-name"></i></div>
+					        <div class="item-inner left-content">
+				            	<div class="item-title label margin-zt">职务</div>
+					            <div class="item-input">
+					              <input type="text"  placeholder="请输入" id="title" name="title">
+					            </div>
+				          	</div>
+					       
+					    </li>
+					    <!-- 手机 -->
+					 	<li>
+					        <div class="item-media"><i class="icon icon-form-name"></i></div>
+					          <div class="item-inner left-content">
+					            <div class="item-title label margin-zt">手机</div>
+					            <div class="item-input">
+					              <input type="text"  placeholder="请输入"  id="mobile" name="mobile" value="<?=!empty($_SESSION['namecard']['phone'])?$_SESSION['namecard']['phone']:''?>">
+					            </div>
+					          </div>
+					    </li>
+					    <li>
+					        
+					        <div class="item-media"><i class="icon icon-form-name"></i></div>
+					        <div class="item-inner left-content">
+					            <div class="item-title label margin-zt">邮箱</div>
+					            <div class="item-input">
+					              	<input type="text"  placeholder="请输入"  id="email" name="email">
+					            </div>
+					        </div>
+					       
+					    </li>
+					    <!-- 地址 -->
+						<li>
+					        
+					        <div class="item-media"><i class="icon icon-form-name"></i></div>
+					        <div class="item-inner left-content">
+					            <div class="item-title label margin-zt">地址</div>
+					            <div class="item-input">
+					              	<input type="text"  placeholder="请输入" id="address" name="address">
+					            </div>
+					        </div>
+					       
+					    </li>
+					    <!-- 备注 -->
+					    <li>
+					        <div class="item-media"><i class="icon icon-form-name"></i></div>
+					        <div class="item-inner left-content">
+					            <div class="item-title label margin-zt">备注</div>
+					            	<div class="item-input">
+					              		<textarea placeholder="请输入" id ="remark" name="remark"></textarea>
+					            	</div>
+					        </div>
+					    </li>
+					</ul>
+					<!-- 保存 -->
+					<div class="content-block">
+						<p><a href="#" class="button button-fill submit buttonstyle"><span class="buttonstyle-top">保存</span></a></p>
+					</div>
+		  		</div>
+		  		
+			</div>
+		</form> 
+        <!-- 加载提示符 -->
+     	<div class="infinite-scroll-preloader">
+          	<div class="preloader"></div>
+      	</div>
+
+      	<script>
+			// 提交验证类
+			$(function(){
+
+				$('.submit').click(function() {
+
+					// 获取提交所有的值
+
+					var formData =  $('.js-validation-CoreDeptUserForm').serializeArray();
+
+					// 如果验证通过走保存程序
+					if (verify(formData)==true) {
+
+						// 获取api
+						var api = $('.js-validation-CoreDeptUserForm').attr('action');
+
+						UserDataSubmit(api,formData);
+					};
+				});
+
+			})
+			
+			/**
+			 * 字段验证
+			 * @param  {[type]} data [description]
+			 * @return {[type]}      [description]
+			 */
+			function verify(data){
+
+				for (var num in data){
+
+					var information = [data[num].name,data[num].value];
+
+					var title = $('#'+information[0]).parents('.item-input').siblings('.item-title').html();
+
+
+					if (information[0]!='num'&&information[0]!='remark') {
+							
+							if (information['1']==""){
+								$.alert(title+'不能为空');
+								return false;
+							};
+
+								// 验证手机号
+							if (information[0]=="mobile") {	
+								// 验证是否为手机号
+								var myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/; 
+								if(!myreg.test(information[1])){ 
+									$.alert('请填写有效的手机号码');
+									return false; 
+								
+								} 
+							
+							};
+
+							// 验证是否为邮箱
+							if (information[0]=="email") {
+								var myreg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/; 
+								if(!myreg.test(information[1])){ 
+								    $.alert('请填写有效的邮箱');
+								    return false; 
+								} 
+							};
+					};
+
+				}
+
+				 return true; 
+					
+			}
+
+		 	/**
+		     * 提交表单 
+		     * @param {[type]} validation [description]
+		     * @param {[type]} form       [description]
+		     */
+		    function UserDataSubmit(api,form) {
+
+		    	// 点击把按钮隐藏
+		        $('.submit').attr('disabled', 'disabled');
+		        $('.submit').addClass('disabled');
+
+		        // 创建空的字符串
+				var data = {};
+				// 字符串进行格式化处理
+				for( var i=0; i<form.length; i++ ) {
+		            var name = form[i]['name'];
+		            var value = form[i]['value'];
+
+		            if (value !== "") {
+		                data[name] = value;
+		            }
+		        }
+				
+				$.post( api, data, function(data, textStatus, xhr) {
+
+		            $('.submit').removeAttr('disabled');
+		            $('.submit').removeClass('disabled');
+
+					if (data['result']==false){
+
+		               $.alert( '操作失败'+data['content'], 'fa fa-times','danger');
+		                return;
+		            };
+		               $.modal({
+					      title:  '提示信息',
+					      text:   '添加成功',
+					      buttons: [
+					        {
+					          text: '继续添加',
+					          onClick: function() {
+					          
+					          }
+					        },
+					        {
+					          text: '查看客户',
+					          onClick: function() {
+								window.location.href= "<?=App::PR('MobCustomerPanel','read',['_id'=>''])?>"+data['_id'];
+					          }
+					        },
+					 
+					      ]
+					    })
+		            return;
+
+		        },'json')
+			}
+		</script>
+		<!-- 底部工具栏 -->
+	    <?php include_once(APP::tpl('mobile/common/foot')); ?>
+	    <!-- 底部工具栏结束 -->
+	</div>
+	
+</div>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<?php use \Tuanduimao\Loader\App as App; ?>
+<?php foreach ($data as $message ) :?>
+<li class="item-content">
+	<div class="card">
+    <div class="card-content">
+	      	<div class="card-content-inner">
+				<div class="row">
+				      <div class="col-50" >
+				      	<span class="float-right"><?=!empty($message['company'])?$message['company']:""?></span>
+				      	<br>
+				      	<span class="blank"></span>
+				      	<span class="float-right float-bot">
+					      	<?=!empty($message['name'])?$message['name']:""?>
+					      	<?=!empty($message['title'])?$message['title']:""?>
+				      	</span>
+				      </div>
+				      <div class="col-50 float-top">
+				      	<span class="float-right"><?=!empty($message['mobile'])?$message['mobile']:""?></span>
+						<span class="float-left"><a href="<?=App::PR('MobCustomerPanel','read',['_id'=>$message['_id']])?>" external><span class="icon icon-right"></span></a></span>
+				      </div>
+			    </div>
+			</div>
+		</div>
+    </div>
+  </div>
+</li>
+<?php endforeach; ?>

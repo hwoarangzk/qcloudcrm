@@ -1,0 +1,316 @@
+<?php use \Tuanduimao\Loader\App as App; ?>
+<!-- 单行搜索框 开始 -->
+<!-- Page Content -->
+<div class="content">
+    <form class="js-form-search" action="" method="post">
+       <!-- Search Section -->
+        <div class="block block-transparent">
+            <div class="row" >
+                <div  class="col-lg-8 col-md-8 col-sm-8">
+                    
+                    <div class="input-group input-group-lg">
+                        <div class="input-group-addon font-w300"> 全文检索 </div> 
+                        <input class="js-icon-search form-control search-content" type="text" placeholder="输入关键词">
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary font-w300 ser-task" type="button"><i class=" si si-magnifier"></i> 搜索 </button>
+                        </span>
+                    </div>
+                    
+                </div>
+                <div class="col-lg-4 col-md-4  col-sm-4">
+                    <button class="btn btn-primary btn-lg font-w300 pull-right data-create data-create-material" 
+                        type="button" data-toggle="block-group" data-block="#customer-create"><i class="fa  fa-th-list"></i> 创建任务 </button>
+                </div>
+            </div>
+        </div> <!-- END Section -->
+    </form><!-- END Search Form -->
+    <div class="block-group">
+        <!-- 添加客户 -->
+        <div 
+            id="customer-create"
+            class="block block-slider block-left " 
+            data-offset='80'
+            option-autoclose='0'
+            option-duration='800'
+            style="margin:0px;" 
+            >
+        </div>
+       <!-- 右侧弹出窗口 -->
+        <div 
+            id="window-left"
+            class="block block-slider block-left " 
+            data-offset='80'
+            option-autoclose='0'
+            option-duration='800'
+            style="margin:0px;" 
+        >
+        </div> 
+        <!-- 右侧弹出end -->
+        <div class="block">
+            <!-- tab开始 -->
+            <ul class="nav nav-tabs nav-tabs-alt" data-toggle="tabs">
+                <li class="active"> 
+                    <a id="tabs-document" href="#tabs-content-all"  class="font-w300 tabs-menu"> 
+                       <i class="fa  fa-th-list push-5-r"></i>任务列表
+                    </a>
+                </li> 
+                <li class="pull-right">
+                    <a href="#" type="button" class="except" data-toggle="block-option" data-action="fullscreen_toggle"></a>
+                </li> 
+            </ul>
+            <!-- TAB内容开始 -->
+            <div class="block-content tab-content">
+                <div class="tab-pane hide" id="tab-pane-error" >
+                    <div class="alert alert-danger push-50-l push-50-r push-20-t ">
+                        <h3 class="font-w300 push-15">载入失败</h3>
+                        <p>{HTML}</p>
+                    </div>
+                    <div class="row"  style="min-height:300px;" ></div>
+                </div>
+                <div class="tab-pane active" id="tabs-status-0">
+                    <div class="row items-push remove-margin">
+                        <?php if(empty($data)):?>
+
+                            <span>对不起，没有找到或者客户没有创建</span>
+
+                        <?php else: ?>
+                        <div class="col-xs-7">
+                            <span class="text-muted font-s13"> 共找到<?=$total?>条 符合条件的数据</span>
+                        </div>
+                        <div class="col-xs-5">
+                            <div class="btn-toolbar pull-right text-center" role="toolbar">
+                                <!-- 排序  -->
+                                <div class="btn-group" role="group">
+                                    <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown"> 
+                                        <i class="glyphicon glyphicon-sort-by-order"></i> 创建时间  <span class="caret"></span> 
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-left">
+                                        <li class="dropdown-header">请选择排序方式</li>
+                                        <li>
+                                            <a tabindex="-1" href="<?=App::R('TaskSearch','index',['page'=>'1','keyword'=>$keyword,'order'=>'ct','mode'=>'r'])?>">
+                                               <i class="glyphicon glyphicon-sort-by-order"></i> 创建时间升序
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a tabindex="-1" href="<?=App::R('TaskSearch','index',['page'=>'1','keyword'=>$keyword,'order'=>'ct_asc','mode'=>'r'])?>">
+                                               <i class="glyphicon glyphicon-sort-by-order-alt"></i> 创建时间降序
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a tabindex="-1" href="<?=App::R('TaskSearch','index',['page'=>'1','keyword'=>$keyword,'order'=>'name','mode'=>'r'])?>">
+                                               <i class="glyphicon glyphicon-sort-by-order"></i> 姓名升序
+                                            </a>
+                                        </li>
+                                         <li>
+                                            <a tabindex="-1" href="<?=App::R('TaskSearch','index',['page'=>'1','keyword'=>$keyword,'order'=>'name_asc','mode'=>'r'])?>">
+                                               <i class="glyphicon glyphicon-sort-by-order-alt"></i> 姓名降序
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!-- 排序结束 -->
+                                <!-- 模式开始 -->
+                                <div class="btn-group" role="group">
+                                    <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" > 
+                                        <i class="glyphicon glyphicon-wrench"></i>阅读模式<span class="caret"></span> 
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li class="dropdown-header">请选择呈现模式</li>
+                                        <li class="read">
+                                            <a tabindex="-1" href="<?=App::R('TaskSearch','index',['page'=>'1','keyword'=>$keyword,'order'=>'name','mode'=>"r"])?>">
+                                               <i class="glyphicon glyphicon-list-alt"></i> 阅读
+                                            </a>
+                                        </li>
+                                        <li class="manage">
+                                            <a tabindex="-1" href="<?=App::R('TaskSearch','index',['page'=>'1','keyword'=>$keyword,'order'=>'name','mode'=>"rw"])?>">
+                                               <i class="glyphicon glyphicon-cog"></i> 管理
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!-- 模式结束 -->
+                            </div>
+                        </div>
+                        <!-- 客户列表 表单 -->
+                        <div class="tab-pane active" id="tabs-content-all">
+                            <!-- 列表页 -->
+                            <table class="js-table-checkable table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" style="width:5%;">
+                                            <label class="css-input css-checkbox css-checkbox-primary remove-margin-t remove-margin-b">
+                                                <span>编号</span>
+                                            </label>
+                                        </th>
+                                        <th class="font-w300" style="width:25%;min-width:200px;">任务名称</th>
+                                        <th class="font-w300" style="width:10%;">消息类型</th>
+                                        <th class="font-w300" style="width:25%;">计划推送时间</th>
+                                        <th class="font-w300" style="width:20%;">管理</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($data as $message) :?>
+                                    <tr class="list-read"   type="button"  data-toggle="block-group" data-block="#window-left">
+
+                                        <td class="text-center" >
+                                            <label class="css-input css-checkbox css-checkbox-primary">
+                                                <span><?=!empty($message['id'])?$message['id']:""?></span>
+                                            </label>
+                                        </td>
+                                        <td><?=!empty($message['name'])?$message['name']:""?></td>
+                                        <td>
+                                            <?php 
+                                                if ($message['type']=='mail') {
+                                                    echo "邮箱";
+                                                }
+                                                if ($message['type']=='sms') {
+                                                    echo "信息";
+                                                }
+
+                                            ?>
+                                        </td>
+                                        <td><?=!empty($message['push_at'])?$message['push_at']:""?></td>
+                                        <!-- 发送状态判断 -->
+                                        <td>
+                                            <input type="text" class="_id hide" value="<?=!empty($message['_id'])?$message['_id']:""?>">
+                                            <?php if($message['status']=="pending"||$message['status']==""):?>
+                                            <span>待发送</span>
+                                            <?php endif; ?>
+
+
+                                            <?php if($message['status']=="running"):?>
+                                             <span>正在发送</span>
+                                            <?php endif; ?>
+
+
+
+                                            <?php if($message['status']=="done"):?>
+                                            <span>已完成</span>
+                                            <?php endif; ?>
+                                           
+                                         </td>
+                                         <!-- 发送状态判断结束 -->
+                                    </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                                <tfoot>
+                                    <!-- 分页 -->
+                                    <tr><td colspan="6">
+                                        <nav class="pull-right">
+                                            <ul class="pagination ">
+                                                <li class="<?php 
+                                                    if ($pre==NULL) {
+                                                        echo "hide";
+                                                    }
+
+                                                 ?>">
+                                                    <a href="<?=App::R('TaskSearch','index',['keyword'=>$keyword,'order'=>$order,'mode'=>'r']).$pre?>"><i class="fa fa-angle-double-left"></i></a>
+                                                </li>
+                                                <?php foreach ($page as $num) :?>
+                                                <li class="<?php if ((int)($num)===$cur) {
+
+                                                        echo "active task-work-page";
+                                                           
+                                                        }?>">
+                                                    <a href="<?=App::R('TaskSearch','index',['page'=>$num,'keyword'=>$keyword,'order'=>$order,'mode'=>'r'])?>"><?=$num;?></a>
+                                                </li>
+                                                 <?php endforeach; ?>
+                                                <li class="<?php 
+                                                    if ($next==NULL) {
+                                                        echo "hide";
+                                                    }?>">
+                                                    <a href="<?=App::R('TaskSearch','index',['keyword'=>$keyword,'order'=>$order,'mode'=>'r']).$next?>" ><i class="fa fa-angle-double-right"></i></a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </td></tr>
+                                    <!-- 分页结束 -->
+                                </tfoot>
+                                <?php endif ?>
+                            </table>
+                            <!-- 列表页结束 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $(function(){
+
+        App.initHelpers([ 'select2', 'slimscroll','ajax-confirm', 'ajax-submit','tab','block-group']);
+        $('.mobadminxiugai').on('success', function(event,data){
+            // 判断是否成功
+            if (data==true) {
+                App.notify( '删除成功' );
+                }else{
+                App.notify( '删除失败', 'fa fa-times','danger');   
+            };
+        });
+    })
+
+    // 防止重复启动
+    $(function(){
+        $('.data-create').click(function(event) {
+            $('#window-left').close();
+        });
+    })
+
+    /**
+     * 搜索方法
+     * @return {[type]} [description]
+     */
+    $(function(){
+        // 搜索按钮点击
+        $('.ser-task').click(function(){
+            sourseek();
+        });
+    })
+
+
+    // 提交get请求
+    function sourseek(){
+       // 获取查询内容
+        var keyword =  $('.search-content').val();
+        var url ="<?=App::R('TaskSearch','index',['page'=>'1','type'=>'r','order'=>'ct','keyword'=>""])?>"+keyword;
+        window.location.href=url; 
+    }
+
+    // 创建按钮启动
+    $(function(){
+        $('.data-create-material').click(function(){
+            $('#customer-create').remote({
+                url:"<?=App::NR('TaskPanel','create')?>",
+                // 载入页面
+                success: function( html, xhr ) {
+                    $('#customer-create').html(html);
+                },
+                // 如果报错返回错误
+                error: function( xhr, status, statusText ) {
+
+                },
+            });
+        });
+
+        // 打开发送任务(阅读)
+        $('.list-read').click(function(){
+
+            var _id =$(this).find('._id').val();
+            $('#window-left').remote({
+                url:"<?=App::NR('TaskPanel','index',['type'=>'read','_id'=>''])?>"+_id,
+                // 载入页面
+                success: function( html, xhr ) {
+                    $('#window-left').html(html);
+                },
+                // 如果报错返回错误
+                error: function( xhr, status, statusText ) {
+
+                },
+            });
+        })
+    })
+</script>
+
+

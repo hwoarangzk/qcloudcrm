@@ -1,0 +1,31 @@
+<?php use \Tuanduimao\Loader\App as App; ?>
+<!DOCTYPE html>
+<html>
+	<head>
+	<?php include_once(APP::tpl('mobile/common/Head')); ?>
+	</head>
+	<body>
+	    <div class="page-group">
+	        <div class="page page-current">
+	        	<header class="bar bar-nav">
+				  	<h1 class='title'><?=$data['title']?></h1>
+				</header>
+				<!-- 页面code -->
+	        	<div class="content">
+				  	<div class="content-padded grid-demo">
+					    <div class="row">
+					      <!-- 搜索 -->
+					     <div class="col-33"><p><a href="<?=App::PR('MobCustomerSearch','find')?>" class="button button-big"  style="height:5.2rem" external> <span class="icon icon-search ico_size  ico_top"></span></a></div>
+					      <!-- 用户 -->
+					      <div class="col-33"><p><a href="<?=App::PR('MobCustomerPanel','create')?>" class="button button-big" style="height:5.2rem" external><span class="icon icon-friends ico_size  ico_top"></span></a></p></div>
+					   	  <!-- 名片扫描 -->
+					      <div class="col-33"><p><a href="<?=App::PR('MobCustomerPanel','wechat')?>" class="button button-big" style="height:5.2rem" external><span class="icon icon-card ico_size ico_top"></span></a></p></div>
+					    </div>
+				  	</div>
+				</div>
+				<!-- 页面code结束 -->
+			 </div>
+	    </div>
+		<?php include_once(APP::tpl('mobile/common/foot')); ?>
+	</body>
+</html>

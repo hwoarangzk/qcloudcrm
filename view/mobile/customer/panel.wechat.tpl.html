@@ -1,0 +1,109 @@
+<?php use \Tuanduimao\Loader\App as App; ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Wechat</title>
+	<?php include_once(APP::tpl('mobile/common/head')); ?>
+
+	<script type='text/javascript' 
+		src='//res.wx.qq.com/wwopen/js/jsapi/jweixin-1.0.0.js' 
+		charset='utf-8'></script>
+
+</head>
+<body>
+
+<script type="text/javascript">
+
+	wx.config({
+		debug: false, 
+		appId: '<?=$data["appid"]?>', 
+		timestamp: '<?=$data["timestamp"]?>' , 
+		nonceStr: '<?=$data["noncestr"]?>', 
+		signature: '<?=$data["signature"]?>',
+		jsApiList: [
+			"chooseImage",
+			"previewImage ",
+			"uploadImage",
+			"downloadImage"
+		]
+	});
+
+
+	wx.error(function(res){
+        alert( 'JSAPI ERROR:' +  res.errMsg );
+        window.location.href="<?=App::PR('Mobcustomersearch','index')?>";
+    });
+
+	wx.ready(function() {
+
+		wx.chooseImage({
+		    count: 1, // 默认9
+		    sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+		    sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+		    success: function (res) {
+		        var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+		        
+		        var id = localIds[0];
+		        readNameCard(id);
+			}
+		});
+
+		function readNameCard(id) {
+			wx.uploadImage({
+			    localId: id, // 需要上传的图片的本地ID，由chooseImage接口获得
+			    isShowProgressTips: 1, // 默认为1，显示进度提示
+			    success: function (res) {
+			    	$.showPreloader('识别中');
+					var serverId = res.serverId; 
+
+					try {
+
+				        $.ajax({
+				        	type:'POST',
+				        	url: "<?=App::PR('Mobcustomerdata','ocr')?>",
+				        	data: {sid: serverId},
+				        	dataType: 'json',
+				        	timeout:10000,
+				        	success:function(data){
+
+								if ( typeof data['result_list'] == "undefined"  ){
+									
+									$.hidePreloader();
+									$.alert('图片识别失败(无结果)', function(){
+				        				window.location.href="<?=App::PR('Mobcustomersearch','index')?>";
+				        			});
+
+				        			return;
+								}
+
+					    		window.location.href="<?=App::PR('Mobcustomerpanel','create')?>";
+						
+				        	},
+				        	error: function(xhr, type){
+				        		$.hidePreloader();
+				        		$.alert('图片识别失败(系统错误 ' + type + ' )', function(){
+				        			window.location.href="<?=App::PR('Mobcustomersearch','index')?>";
+				        		});
+				        	}
+				        });
+
+			        } catch( e ) {
+
+			        	$.hidePreloader();
+				        $.alert('图片识别失败', function(){
+				        	window.location.href="<?=App::PR('Mobcustomersearch','index')?>";
+				        });
+			        }
+			    }
+			});
+			
+		}
+
+	});
+</script>
+
+<script type='text/javascript' src='<?=\Tuanduimao\Conf::G("general/static")?>/sm/js/sm.js' charset='utf-8'></script>
+<script type='text/javascript' src='<?=\Tuanduimao\Conf::G("general/static")?>/sm/js/sm-extend.min.js' charset='utf-8'></script>
+</body>
+</html>

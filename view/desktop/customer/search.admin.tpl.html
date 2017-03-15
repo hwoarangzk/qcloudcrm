@@ -1,0 +1,326 @@
+<?php use \Tuanduimao\Loader\App as App; ?>
+<!-- 开始管理模式 -->
+<!-- Page Content -->
+<div class="content">
+        <!-- Search Section -->
+        <div class="block block-transparent">
+            <div class="row" >
+                <!-- 全文检索 -->
+                <div  class="col-lg-8 col-md-8 col-sm-8">
+                    <div class="input-group input-group-lg">
+                        <div class="input-group-addon font-w300"> 全文检索 </div> 
+                        <input class="js-icon-search form-control sercontent" type="text" placeholder="输入关键词" value="<?=!empty($keyword)?$keyword:""?>">
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary font-w300 rwdimsearch" type="button"><i class=" si si-magnifier"></i> 搜索 </button>
+                        </span>
+                    </div>
+               </div>
+               <!-- 全文检索结束 -->
+               <!-- 创建资料 -->
+                <div class="col-lg-4 col-md-4  col-sm-4">
+                    <button class="btn btn-primary btn-lg font-w300 pull-right data-create  data-create-rw" 
+                        data-toggle="block-group" data-block="#customer-create"
+                        data-toggle-open="block-group"
+                        type="button" ><i class="fa fa-plus"></i> 创建资料</button>
+                </div>
+                <!-- 创建资料结束 -->
+            </div>
+        </div> <!-- END Section -->
+
+    <div class="block-group">
+        <!-- 添加客户 -->
+        <div 
+            id="customer-create"
+            class="block block-slider block-lef
+            t " 
+            data-offset='80'
+            option-autoclose='0'
+            option-duration='800'
+            style="margin:0px;" 
+            >
+        </div> 
+        <!-- 添加客户结束 -->
+        <!-- 修改窗口 -->
+        <div 
+            id="window-left"
+            class="block block-slider block-left " 
+            data-offset='80'
+            option-autoclose='0'
+            option-duration='800'
+            style="margin:0px;" 
+        ></div> 
+        <!-- 修改弹出end -->
+        <div class="block">
+            <!-- tab开始 -->
+            <ul class="nav nav-tabs nav-tabs-alt" data-toggle="tabs">
+                <li class="active"> 
+                    <a id="tabs-document" href="#tabs-content-all"  class="font-w300 tabs-menu"> 
+                       <i class="fa  fa-th-list push-5-r"></i>客户列表
+                    </a>
+                </li> 
+                <li class="pull-right">
+                    <a href="#" type="button" class="except" data-toggle="block-option" data-action="fullscreen_toggle"></a>
+                </li> 
+            </ul>
+            <!-- TAB内容开始 -->
+            <div class="block-content tab-content">
+                <!-- 载入失败 -->
+                <div class="tab-pane hide" id="tab-pane-error" >
+                    <div class="alert alert-danger push-50-l push-50-r push-20-t ">
+                        <h3 class="font-w300 push-15">载入失败</h3>
+                        <p>{HTML}</p>
+                    </div>
+                    <div class="row"  style="min-height:300px;" ></div>
+                </div>
+                <!-- 载入失败end -->
+                <div class="tab-pane active" id="tabs-status-0">
+                    <div class="row items-push remove-margin">
+                        <?php if(empty($data)):?>
+                            <span>对不起，没有找到或者客户没有创建</span>
+                        <?php else: ?>
+                        <!-- 符合条件 -->
+                        <div class="col-xs-7">
+                            <span class="text-muted font-s13"> 共找到<?=$total?>条符合条件的数据</span>
+                        </div>
+                        <!-- 符合条件结束 -->
+
+                        <div class="col-xs-5">
+                            <div class="btn-toolbar pull-right text-center" role="toolbar">
+                                <!-- 排序方式 -->
+                                <div class="btn-group" role="group">
+                                    <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown"> 
+                                        <i class="glyphicon glyphicon-sort-by-order"></i> 创建时间  <span class="caret"></span> 
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-left">
+                                        <li class="dropdown-header">请选择排序方式</li>
+                                        <li>
+                                            <a tabindex="-1" href="<?=App::R('CustomerSearch','index',['page'=>'1','keyword'=>$keyword,'order'=>'ct','mode'=>'rw'])?>">
+                                               <i class="glyphicon glyphicon-sort-by-order"></i> 创建时间升序
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a tabindex="-1" href="<?=App::R('CustomerSearch','index',['page'=>'1','keyword'=>$keyword,'order'=>'ct_asc','mode'=>'rw'])?>">
+                                               <i class="glyphicon glyphicon-sort-by-order-alt"></i> 创建时间降序
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a tabindex="-1" href="<?=App::R('CustomerSearch','index',['page'=>'1','keyword'=>$keyword,'order'=>'name','mode'=>'rw'])?>">
+                                               <i class="glyphicon glyphicon-sort-by-order"></i> 姓名升序
+                                            </a>
+                                        </li>
+                                         <li>
+                                            <a tabindex="-1" href="<?=App::R('CustomerSearch','index',['page'=>'1','keyword'=>$keyword,'order'=>'name_asc','mode'=>'rw'])?>">
+                                               <i class="glyphicon glyphicon-sort-by-order-alt"></i> 姓名降序
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!-- 排序方式结束 -->
+                                <!-- 模式管理 -->
+                                <div class="btn-group" role="group">
+                                    <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" > 
+                                        <i class="glyphicon glyphicon-cog"></i>管理模式<span class="caret"></span> 
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li class="dropdown-header">请选择呈现模式</li>
+                                        <li class="read">
+                                            <a tabindex="-1" href="<?=App::R('CustomerSearch','index',['page'=>'1','keyword'=>$keyword,'order'=>'name','type'=>"r"])?>">
+                                               <i class="glyphicon glyphicon-list-alt"></i> 阅读
+                                            </a>
+                                        </li>
+                                        <li class="manage">
+                                            <a tabindex="-1" href="<?=App::R('CustomerSearch','index',['page'=>'1','keyword'=>$keyword,'order'=>'name','type'=>"rw"])?>">
+                                               <i class="glyphicon glyphicon-cog"></i> 管理
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!-- 模式管理结束 -->
+                            </div>
+                        </div>
+                        <!-- 客户列表 表单 -->
+                        <div class="tab-pane active" id="tabs-content-all">
+                            <!-- 列表页 -->
+                            <table class="js-table-checkable table table-hover remove-margin">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" style="width:5%;">
+                                            <label class="css-input css-checkbox css-checkbox-primary remove-margin-t remove-margin-b">
+                                                <span>编号</span>
+                                            </label>
+                                        </th>
+                                        <th class="font-w300" style="width:25%;min-width:200px;">公司</th>
+                                        <th class="font-w300" style="width:10%;">联系人</th>
+                                        <th class="font-w300" style="width:25%;">联系人职务</th>
+                                        <th class="font-w300" style="width:20%;">管理</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                <?php foreach ($data as $message) :?>
+                                    <tr>
+                                        <td class="text-center" >
+                                            <label class="css-input css-checkbox css-checkbox-primary">
+                                                <span><?=!empty($message['num'])?$message['num']:""?></span>
+                                            </label>
+                                        </td>
+                                        <td><?=!empty($message['company'])?$message['company']:""?></td>
+                                        <td><?=!empty($message['name'])?$message['name']:""?></td>
+                                        <td><?=!empty($message['title'])?$message['title']:""?></td>
+                                        <td>
+                                        <button  class="btn btn-sm manage-xiugai"  type="sbutton" data-toggle="block-group" data-block="#window-left" value="<?=$message['_id']?>"
+                                         >修改</button>
+                                            <button  class="btn btn-sm btn-danger push-20-r ajax-confirm adminxiugai" type="button"    
+                                            confirm-title="您确定要删除<?=!empty($message['name'])?$message['name']:""?>吗？"
+                                            confirm-content="请确认删除用户[<?=!empty($message['name'])?$message['name']:""?>]，该操作不可恢复！"
+                                            confirm-modal = "HHD"
+                                            confirm-dismiss = "取消删除"
+                                            confirm-submit= "确认删除"
+                                            confirm-action="<?=App::NR('CustomerData','delete')?>"
+                                            data-param-id="<?=$message['_id']?>" 
+                                            data-param-data="PARMAMID"> 删除</button>
+                                       </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                                </tbody>
+                                 <tfoot>
+                                    <tr><td colspan="6">
+                                        <nav class="pull-right">
+                                            <!-- 分页开始 -->
+                                            <!-- 如果没有前进页隐藏 -->
+                                            <ul class="pagination manage-style">
+                                                <li class="<?php 
+                                                    if ($pre==NULL) {
+                                                        echo "hide";
+                                                    }
+
+                                                 ?>">
+                                                    <a href="<?=App::R('CustomerSearch','index',['keyword'=>$keyword,'order'=>$order,'mode'=>'rw']).$pre?>" 
+                                                    
+
+                                                    ><i class="fa fa-angle-double-left"></i></a>
+                                                </li>
+                                            
+                                                <?php foreach ($page as $num) :?>
+                                                <li  class="
+                                                    <?php if ((int)($num)===$cur) {
+
+                                                        echo "active";
+                                                           
+                                                        }?>">
+                                                    <a href="<?=App::R('CustomerSearch','index',['page'=>$num,'keyword'=>$keyword,'order'=>$order,'mode'=>'rw'])?>"><?=$num;?></a>
+                                                </li>
+                                                <?php endforeach; ?>
+                                                
+                                                <li class="<?php 
+                                                    if ($next==NULL) {
+                                                        echo "hide";
+                                                    }?>">
+                                                    <a href="<?=App::R('CustomerSearch','index',['keyword'=>$keyword,'order'=>$order,'mode'=>'rw']).$next?>"><i class="fa fa-angle-double-right"></i></a>
+                                                </li>
+                                            </ul>
+                                            <!-- 如果没有后退页隐藏 -->
+                                            <!-- 分页结束 -->
+                                        </nav>
+                                    </td></tr>
+                                </tfoot>
+                                <?php endif ?>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        // 初始化表单
+        App.initHelpers([ 'select2', 'slimscroll','ajax-confirm', 'ajax-submit','tab']);
+        App.initHelpers(['block-group']);
+        // 判断删除是否成功
+        $('.adminxiugai').on('success', function(event,data){
+            // 判断是否成功
+            if (data==true) {
+                App.notify( '删除成功' );
+                window.location.reload();
+            }else{
+                App.notify( '删除失败', 'fa fa-times','danger');   
+            };
+        });
+    })
+
+    /**
+     * 搜索方法
+     * @return {[type]} [description]
+     */
+    $(function(){
+        // 搜索按钮点击
+        $('.rwdimsearch').click(function(){
+            rwseek();
+        });
+    })
+
+    // 提交get请求
+    function rwseek(){
+        // 获取查询内容
+        var keyword =  $('.sercontent').val();
+        var url ="<?=App::R('Customersearch','index',['page'=>'1','type'=>'rw','order'=>'ct','keyword'=>""])?>"+keyword; 
+        window.location.href=url; 
+    }
+
+    // 防止重复启动
+    $(function(){
+        $('.data-create').click(function(event) {
+            $('#window-left').close();
+            
+        });
+    })
+
+    /**
+     * 关闭页面
+     * @return {[type]} [description]
+     */
+    function noopen(){
+        $('#window-left').close();
+    }
+
+    // 右侧弹出层
+    $(function(){
+        // 创建弹出
+        $('.data-create-rw').click(function(){
+            $('#customer-create').remote({
+                url:"<?=App::NR('CustomerPanel','create')?>",
+                // 载入页面
+                success: function( html, xhr ) {
+                    $('#customer-create').html(html);
+                },
+                // 如果报错返回错误
+                error: function( xhr, status, statusText ) {
+
+                },
+            });
+        });
+        // 创建弹出end
+        $('.manage-xiugai').click(function(){
+            // 获取id
+            var _id = $(this).val();
+            $('#window-left').remote({
+                url:"<?=App::NR('CustomerPanel','index',['type'=>'update','_id'=>''])?>"+_id,
+                // 载入页面
+                success: function( html, xhr ) {
+                    // 插入代码
+                    $('#window-left').html(html);
+                },
+                // 如果报错返回错误
+                error: function( xhr, status, statusText ) {
+                },
+               
+            });
+        });
+    })
+
+</script>
+
+
+
+

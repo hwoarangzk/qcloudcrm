@@ -1,0 +1,25 @@
+<?php use \Tuanduimao\Loader\App as App; ?>
+<?php foreach ($data as $messages ) :?>
+<li class="item-content">
+	<div class="card">
+		<div class="card-content">
+			<div class="row">
+				<div class="col-50 txt-center-find margin-top margin-letf">
+		      		<i class="icon icon-me"></i><span><?=$messages['oname']?$messages['oname']:""?></span>
+		      		<br>
+					<?php if(mb_strlen($messages['content'],'UTF8')>=28):?>
+		      			<span><?=mb_substr($messages['content'],0,28)."...";?></span>
+					<?php endif; ?>
+
+					<?php if(mb_strlen($messages['content'],'UTF8')<28):?>
+						<span><?=$messages['content']?$messages['content']:""?></span>
+					<?php endif; ?>
+				</div>
+		      	<div class="col-50 txt-center-find txt-top-center  margin-top-right">
+		      		<span><?=$messages['createat']?$messages['createat']:""?></span>
+		      	</div>
+	    	</div>
+	    </div>
+	</div>
+</li>
+<?php endforeach; ?>

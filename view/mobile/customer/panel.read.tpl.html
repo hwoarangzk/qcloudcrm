@@ -1,0 +1,254 @@
+<?php use \Tuanduimao\Loader\App as App; ?>
+<!DOCTYPE html>
+<html>
+<head>
+<?php include_once(APP::tpl('mobile/common/head')); ?>
+<title><?=$data['title']?></title>
+<style>
+	.bar-nav~.content {
+   		 top: 0.5rem;
+	}
+	.list-block .item-title.label{
+
+		margin-left:1rem;
+
+	}
+
+	.list-block .item-media+.item-inner {
+	   margin-left: 0.05rem;
+	}
+</style>
+</head>
+<body>
+<div class="page-group">
+	<div class="page page-current">
+		<header class="bar bar-nav">
+		  	<p class="buttons-row" style="margin-top:3px;">
+		  		<a href="<?=App::PR('MobCustomerPanel',' read',['_id'=>$_GET['_id']])?>" class="button  active" external>详情</a>
+		  		<a href="<?=App::PR('MobMarking','index',['_id'=>$_GET['_id']])?>" class="button" external>标注</a>
+		  		<a href="<?=App::PR('MobTracking','index',['_id'=>$_GET['_id']])?>" class="button" external>追踪</a></p>
+		</header>
+		<form action="<?=App::PR('MobCustomerData','save')?>"  method="POST" class="js-validation-mobileupdate">
+		<div class="content">
+			<div class="list-block">
+			    <ul>
+			      	<!-- 编号开始 -->
+				    <li>
+				        <div class="item-media"><i class="icon icon-form-name"></i></div>
+			          	<div class="item-inner left-content">
+				            <div class="item-title label margin-zt">编号</div>
+				            <div class="item-input">
+				              	<input type="text" id="num" name="num" value="<?=!empty($data['num'])?$data['num']:""?>">
+				            </div>
+			          	</div>
+				    </li>
+				    <!-- 编号结束 -->
+				    <!-- 公司名称开始 -->
+				   	<li>
+				        <div class="item-media"><i class="icon icon-form-name"></i></div>
+				        <div class="item-inner left-content">
+				            <div class="item-title label margin-zt">公司名称</div>
+				            <div class="item-input">
+				              	<input type="text"  placeholder="请输入" id ="company" name ="company" value="<?=!empty($data['company'])?$data['company']:""?>">
+				            </div>
+				        </div>
+				       
+				    </li>
+				    <!-- 公司名称结束 -->
+				    <!-- 联系人开始 -->
+				  	<li>
+				        <div class="item-media"><i class="icon icon-form-name"></i></div>
+				        <div class="item-inner left-content">
+				            <div class="item-title label margin-zt">联系人</div>
+				            <div class="item-input">
+				              	<input type="text"  placeholder="请输入" value="<?=!empty($data['name'])?$data['name']:""?>">
+				            </div>
+				        </div>
+				       
+				   </li>
+				   <!-- 联系人结束 -->
+				   <!-- 职务开始 -->
+				   <li>
+				       <div class="item-media"><i class="icon icon-form-name"></i></div>
+				        <div class="item-inner left-content">
+				            <div class="item-title label margin-zt">职务</div>
+				            <div class="item-input">
+				              	<input type="text"  placeholder="请输入" id="title"  name="title" value="<?=!empty($data['title'])?$data['title']:""?>"  >
+				            </div>
+				        </div>
+				    </li>
+				   <!--  职务结束 -->
+				   <!--  邮箱开始 -->
+					<li>
+				        <div class="item-media"><i class="icon icon-form-name"></i></div>
+				        <div class="item-inner left-content">
+				            <div class="item-title label margin-zt">邮箱</div>
+				            <div class="item-input">
+				              	<input type="text"  placeholder="请输入" value="<?=!empty($data['email'])?$data['email']:""?>" name="email" id ="mobile">
+				            </div>
+				        </div>
+				   </li>
+				   <!-- 邮箱结束 -->
+				   <!-- 手机开始 -->
+				 	<li>
+				        <div class="item-media"><i class="icon icon-form-name"></i></div>
+				        <div class="item-inner left-content">
+				            <div class="item-title label margin-zt">手机</div>
+				            <div class="item-input">
+				              	<input type="text"  placeholder="请输入" value="<?=!empty($data['mobile'])?$data['mobile']:""?>" name="mobile" id ="mobile">
+				            </div>
+				        </div>
+				   </li>
+				   <!-- 手机结束 -->
+				   	<!-- 地址开始 -->
+					<li>
+				        
+				        <div class="item-media"><i class="icon icon-form-name"></i></div>
+				        <div class="item-inner left-content">
+				            <div class="item-title label margin-zt">地址</div>
+				            <div class="item-input">
+				              	<input type="text"  placeholder="请输入" value="<?=!empty($data['address'])?$data['address']:""?>" id="address" name="address">
+				            </div>
+				        </div>
+				    </li>
+				    <!-- 地址结束 -->
+				    <!-- 备注开始 -->
+				    <li>
+				        <div class="item-media"><i class="icon icon-form-name"></i></div>
+				        <div class="item-inner left-content">
+				            <div class="item-title label margin-zt">备注</div>
+			            	<div class="item-input">
+			              		<textarea placeholder="请输入" name="remark" id="remark" value="<?=!empty($data['remark'])?$data['remark']:""?>"><?=!empty($data['remark'])?$data['remark']:""?></textarea>
+			            	</div>
+				        </div>
+				    </li>
+				    <!-- 备注结束 -->
+				</ul>
+				<div class="content-block button-top" style="border:1px solid #ffff;">
+					<p><a href="tel:<?=!empty($data['mobile'])?$data['mobile']:""?>" class="button button-fill button-success buttonstyle"><span class="buttonstyle-top">呼叫</span></a></p>
+					<p><a href="#" class="button button-fill submit buttonstyle"><span class="buttonstyle-top">修改模式</span></a></p>
+					<p><a href="<?=App::PR('MobCustomerSearch','find')?>" class="button button-fill buttonstyle" external><span class="buttonstyle-top">返回</span></a></p>
+
+				</div>
+			</div>
+		</div>
+		<input type="text" id="_id" name="_id" class="hide" value="<?=!empty($data['_id'])?$data['_id']:""?>">
+		</form>
+		<?php include_once(APP::tpl('mobile/common/foot')); ?>
+	</div>
+</div>
+
+<script>
+	
+
+		$(function(){
+
+			$('.submit').click(function() {
+
+				// 获取提交所有的值
+
+				var formData =  $('.js-validation-mobileupdate').serializeArray();
+
+				// 如果验证通过走保存程序
+				if (verify(formData)==true) {
+
+					// 获取api
+					var api = $('.js-validation-mobileupdate').attr('action');
+
+					UserDataSubmit(api,formData);
+				};
+			});
+
+		})
+
+
+		/**
+		 * 字段验证
+		 * @param  {[type]} data [description]
+		 * @return {[type]}      [description]
+		 */
+		function verify(data){
+
+			for (var num in data){
+
+				var information = [data[num].name,data[num].value];
+
+				var title = $('#'+information[0]).parents('.item-input').siblings('.item-title').html();
+
+
+				if (information[0]!='num'&&information[0]!='remark') {
+						
+						if (information['1']==""){
+							$.alert(title+'不能为空');
+							return false;
+						};
+
+							// 验证手机号
+						if (information[0]=="mobile") {	
+							// 验证是否为手机号
+							var myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/; 
+							if(!myreg.test(information[1])){ 
+								$.alert('请填写有效的手机号码');
+								return false; 
+							
+							} 
+						
+						};
+
+						// 验证是否为邮箱
+						if (information[0]=="email") {
+							var myreg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/; 
+							if(!myreg.test(information[1])){ 
+							    $.alert('请填写有效的邮箱');
+							    return false; 
+							} 
+						};
+				};
+
+			}
+			return true; 
+		}
+		/**
+	     * 提交表单 
+	     * @param {[type]} validation [description]
+	     * @param {[type]} form       [description]
+	     */
+	    function UserDataSubmit(api,form) {
+
+	    	// 点击把按钮隐藏
+	        $('.submit').attr('disabled', 'disabled');
+	        $('.submit').addClass('disabled');
+
+	        // 创建空的字符串
+			var data = {};
+			// 字符串进行格式化处理
+			for( var i=0; i<form.length; i++ ) {
+	            var name = form[i]['name'];
+	            var value = form[i]['value'];
+
+	            if (value !== "") {
+	                data[name] = value;
+	            }
+	        }
+			
+			$.post( api, data, function(data, textStatus, xhr) {
+
+	            $('.submit').removeAttr('disabled');
+	            $('.submit').removeClass('disabled');
+
+				if (data['result']==false){
+
+	               $.alert( '操作失败'+data['content'], 'fa fa-times','danger');
+	                return;
+	            };
+
+	            $.alert( '修改成功');
+
+	        },'json')
+
+	    }
+</script>
+</body>
+</html>
+
+                    

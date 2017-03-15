@@ -1,0 +1,200 @@
+<?php use \Tuanduimao\Loader\App as App; ?>
+<!-- 素材创建 -->
+<div class="block block-content remove-padding" style="height:auto;">
+    <ul class="nav nav-tabs nav-tabs-alt"  data-toggle="tabs">
+        <li class="active"> 
+            <a id="tabs-all" href="#tabs-content-all"  class="font-w300 tabs-menu"  data-remote="" > <i class="fa fa-user-plus"></i>添加素材</a>
+        </li>
+        <li class="pull-right create_close">
+            <a id="tabs-document" href="#"  class="font-w300 tabs-menu">关闭</a>
+        </li>  
+    </ul>
+    <!-- TAB内容开始 -->
+    <div class="tab-content">
+        <div class="tab-pane hide" id="tab-pane-error" >
+            <div class="alert alert-danger push-50-l push-50-r push-20-t ">
+                <h3 class="font-w300 push-15">载入失败</h3>
+                <p>{HTML}</p>
+            </div>
+            <div class="row"  style="min-height:300px;" ></div>
+        </div>
+        <!-- 创建右侧弹出 表单 -->
+        <div class="tab-pane active" id="tabs-content-all">
+                <div class="content">
+                    <form class="form-horizontal push-10-t js-validation-sourceupdate" action="<?=App::NR('SourceData','save')?>" method="post">
+                        <div class="form-group">
+                            <!-- 标题 -->
+                            <div class="col-sm-6">
+                                <div class="form-material">
+                                    <input class="form-control" type="text" id="title" name="title" placeholder="请填写标题">
+                                    <label for="material-text">标题 <span class="mustbe">*</span></label>
+                                </div>
+                            </div>
+                            <!-- 标题结束 -->
+                            <!-- 短息类型 -->
+                            <div class="col-sm-6">
+                                <div class="form-material">
+                                    <label for="material-text">类型 <span class="mustbe">*</span></label>
+                                    <select class="js-select2 form-control" id="type" name="type" required>
+                                        <option value="">邮件/短信</option>
+                                        <option value="mail">邮件</option>
+                                        <option value="sms">短信</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- 短信类型结束 -->
+                        </div>
+                        <!-- 正文 -->
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <div class="form-material">
+                                    <label for="material-textarea-large">正文 <span class="mustbe">*</span></label>
+                                    <pre id="cus" style="height:400px;" name="content"></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 正文结束 -->
+                        <!-- 保存按钮 -->
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <div class="col-xs-3">
+                                     <div class="form-material">
+                                        <button class="btn btn-minw btn-primary pull-left" type="submit">保存</button>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>  
+                        <!-- 保存按钮结束 -->
+                    </form>
+                </div>
+            </div>
+        <!-- 创建右侧弹出表单结束 -->
+    </div>
+</div> 
+<!-- 引入编辑器ace -->
+<script src="<?=APP::$APP_HOME_STATIC?>/static/js/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    // ace编辑器处理
+    var editor = ace.edit("cus");
+    editor.setTheme("ace/theme/twilight");
+    editor.session.setMode("ace/mode/markdown");
+    editor.setShowPrintMargin(false);
+    // 初始化表单                    
+    $(function(){
+        App.initHelpers(['select2','ajax-confirm','ajax-submit']);
+    })
+</script>
+<script>
+$(function(){
+    // 关闭弹出
+    $('.create_close').click(function(event) {
+        
+        $('#customer-create').close();
+    });
+})
+$(function(){
+    // 验证
+    $('.js-validation-sourceupdate').validate({
+            errorClass: 'help-block text-right animated fadeInDown',
+            errorElement: 'div',
+            errorPlacement: function(error, e) {                
+                jQuery(e).parents('.form-group .form-material').append(error);
+            },
+            highlight: function(e) {
+                jQuery(e).closest('.form-group .form-material').parent().removeClass('has-error').addClass('has-error');
+                jQuery(e).closest('.help-block').remove();
+            },
+            unhighlight:function(e){
+                jQuery(e).closest('.form-group .form-material').parent().removeClass('has-error');
+                jQuery(e).closest('.help-block').remove();
+            },
+            success: function(e) {
+                jQuery(e).closest('.form-group .form-material').parent().removeClass('has-error');
+                jQuery(e).closest('.help-block').remove();
+            },
+
+            submitHandler: function(form) {
+                var self = this;
+                // 把from提交的内容进行截断,调用UserDataSubmit方法;
+                DataSubmit(self,form,function callback(){
+                        App.notify( '操作成功' );
+                        App.loading().hide()
+                        setTimeout(window.location.reload(),3000);
+               });
+            },
+            rules: {  
+                'title': {
+                        required: true,
+                        minlength: 2,
+                        maxlength: 200,
+                },
+                type : "required"
+            },
+            messages: {
+                'title': {
+                    required: '请填写标题名',
+                    minlength: '标题名不能少于2个字',
+                    maxlength: '标题名不能超过200个字',
+                },
+                type : "请填写类型"
+            },
+        });
+
+    })
+    // 验证结束
+
+    /**
+     * 提交表单 
+     * @param {[type]} validation [description]
+     * @param {[type]} form       [description]
+     */
+    function DataSubmit( validation, form , callback ) {
+
+        App.loading({message:'正在储存...'}).show();
+        var api = $(form).attr('action');
+        var next = $(form).attr('data-next');
+        var submits = $('button[type="submit"]', form);
+
+
+        $(submits).attr('disabled', 'disabled');
+        $(submits).addClass('disabled');
+
+        var data = {};
+
+        var formData =  $(form).serializeArray();
+        for( var i=0; i<formData.length; i++ ) {
+            var name = formData[i]['name'];
+            var value = formData[i]['value'];
+
+            if (value !== "") {
+                data[name] = value;
+            }
+        }
+
+
+        data['content'] = editor.getValue();
+        
+        data = jQuery.extend(data, {});
+
+        $.post( api, data, function(data, textStatus, xhr) {
+
+            $(submits).removeAttr('disabled');
+            $(submits).removeClass('disabled');
+
+            if (data['result']==false){
+
+                App.notify( '操作失败'+data['content'], 'fa fa-times','danger');
+                return;
+            };
+            callback();
+            return;
+
+        },'json')
+    }
+
+</script>
+<style>
+    .mustbe{
+        color: red;
+    }
+</style>

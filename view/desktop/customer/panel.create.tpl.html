@@ -1,0 +1,325 @@
+<?php use \Tuanduimao\Loader\App as App; ?>
+<div class="block block-content remove-padding" style="height:auto;">
+    <ul class="nav nav-tabs nav-tabs-alt" data-toggle="tabs">
+        <li class="active"> 
+            <a id="tabs-all" href="#tabs-content-all"  class="font-w300 tabs-menu"  data-remote="" ><i class="fa fa-user-plus"></i>添加客户
+            </a>
+        </li>
+        <li class="pull-right bc-guanbi" data-toggle-close="block-group"   data-block="#customer-create">
+            <a id="tabs-document" href="#"  class="font-w300 tabs-menu">关闭
+            </a>
+        </li>  
+    </ul>
+
+    <!-- TAB内容开始 -->
+    <div class="tab-content">
+        <div class="tab-pane hide" id="tab-pane-error" >
+            <div class="alert alert-danger push-50-l push-50-r push-20-t ">
+                <h3 class="font-w300 push-15">载入失败</h3>
+                <p>{HTML}</p>
+            </div>
+            <div class="row"  style="min-height:300px;" ></div>
+        </div>
+        <!-- 创建右侧弹出 表单 -->
+        <div class="tab-pane active" id="tabs-content-all">
+            <div class="content">
+                <div class="change">
+
+                   <form class="js-validation-CoreDeptUserForm push-10-t form-horizontal" action="<?=App::NR('CustomerData','save')?>" method="post">
+                        <div class="form-group">
+                            <!-- 公司名称 -->
+                            <div class="col-sm-6">
+                                <div class="form-material">
+                                    <input class="form-control" type="text" id="company" name="company" placeholder="请填写公司名称">
+                                    <label for="material-text">公司名称 <span class="mustbe">*</span></label>
+                                </div>
+                            </div>
+                            <!-- 公司名称end -->
+                            <input type="text" value="" id="id" name="id" class="hide">
+                            <!-- 公司编号 -->
+                            <div class="col-sm-6">
+                                <div class="form-material">
+                                    <input class="form-control" type="text" id="num" name="num" placeholder="请填写编号" value="">
+                                    <label for="material-text">编号</label>
+                                </div>
+                            </div>
+                            <!-- 公司编号end -->
+                        </div>
+                        
+                        <div class="form-group">
+                            <!-- 联系人 -->
+                            <div class="col-sm-6">
+                                <div class="form-material">
+                                    <input class="form-control" type="text" id="name" name="name" placeholder="请填写联系人">
+                                    <label for="material-text">联系人 <span class="mustbe">*</span></label>
+                                </div>
+                            </div>
+                            <!-- 联系人end -->
+                            <!-- 联系人职务 -->
+                            <div class="col-sm-6">
+                                <div class="form-material">
+                                    <input class="form-control" type="text" id="title" name="title" placeholder="请填写联系人职务">
+                                    <label for="material-text">联系人职务 <span class="mustbe">*</span></label>
+                                </div>
+                            </div>
+                            <!-- 联系人职务end -->
+                        </div>
+
+                        <div class="form-group">
+                            <!-- 联系人手机号 -->
+                            <div class="col-sm-6">
+                                <div class="form-material">
+                                    <input class="form-control" type="text" id="mobile" name="mobile" placeholder="请填写联系人手机号">
+                                    <label for="material-text">联系人手机号 <span class="mustbe">*</span></label>
+                                </div>
+                            </div>
+                            <!-- 联系人手机号 -->
+                            <!-- 联系人邮箱 -->
+                            <div class="col-sm-6">
+                                <div class="form-material">
+                                    <input class="form-control" type="text" id="email" name="email" placeholder="请填写联系人邮箱">
+                                    <label for="material-text">联系人邮箱 <span class="mustbe">*</span></label>
+                                </div>
+                            </div>
+                            <!-- 联系人邮箱end -->
+                        </div>
+                        <div class="form-group">
+                            <!-- 联系人地址 -->
+                            <div class="col-sm-12">
+                                <div class="form-material">
+                                    <input class="form-control" type="text" id="address" name="address" placeholder="请填写联系人地址">
+                                    <label for="material-text">联系人地址 <span class="mustbe">*</span></label>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <!-- 客户备注 -->
+                            <div class="col-xs-12">
+                                <div class="form-material">
+                                    <textarea class="form-control" id="remark" name="remark" rows="8" placeholder="请填写客户备注"></textarea>
+                                    <label for="material-textarea-large">客户备注 <span class="mustbe">*</span></label>
+                                </div>
+                            </div>
+                            <!-- 客户标注结束 -->
+                        </div>
+                        <!-- 操作按钮区域 -->
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <div class="col-xs-3">
+                                     <div class="form-material">
+                                        <button class="btn btn-minw btn-primary pull-left " type="submit">保存</button>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 操作按钮区域结束 -->
+                    </form>
+               </div>
+            </div>
+        </div>
+        <!-- 创建右侧弹出表单结束 -->
+    </div>
+</div> 
+
+<script>
+    
+ 
+
+    // 验证采用validate插件
+    // 具体验证规则可以参考validate手册
+    $(function(){
+
+            //关闭按钮
+            $('.bc-guanbi').click(function() {
+
+                $('#customer-create').close();
+
+            });
+
+            $('.js-validation-CoreDeptUserForm').validate({
+                errorClass: 'help-block text-right animated fadeInDown',
+                errorElement: 'div',
+                errorPlacement: function(error, e) {                
+                    jQuery(e).parents('.form-group .form-material').append(error);
+                },
+                highlight: function(e) {
+                    jQuery(e).closest('.form-group .form-material').parent().removeClass('has-error').addClass('has-error');
+                    jQuery(e).closest('.help-block').remove();
+                },
+                unhighlight:function(e){
+                    jQuery(e).closest('.form-group .form-material').parent().removeClass('has-error');
+                    jQuery(e).closest('.help-block').remove();
+                },
+                success: function(e) {
+                    jQuery(e).closest('.form-group .form-material').parent().removeClass('has-error');
+                    jQuery(e).closest('.help-block').remove();
+                },
+
+                submitHandler: function(form) {
+
+                    var self = this;
+                    // // 把from提交的内容进行截断,调用UserDataSubmit方法;
+                    UserDataSubmit(self, form,function callback(){
+
+                        // 全局通知
+                        App.notify( '操作成功' );
+                        window.location.reload();
+                    });
+                },
+                rules: {
+                    'company': {
+                            required: true,
+                            minlength: 2,
+                            maxlength: 200,
+                    },
+                    'num': {
+                            minlength: 2,
+                            maxlength: 20,
+                    },
+                    'name': {
+                            required: true,
+                            minlength: 2,
+                            maxlength: 20,
+                    },
+                    'title' : {
+                            required: true,
+                            minlength: 2,
+                            maxlength: 20,
+                    },
+                    'mobile':{
+                        required: true,
+                        minlength:11,
+                        number:true
+                    },
+                    'email': {
+                            required: true,
+                            minlength: 2,
+                            maxlength: 80,
+                            email:true
+                    },
+                    'address': {
+                            required: true,
+                            minlength: 2,
+                            maxlength: 200,
+                    },
+                    'remark': {
+                            required: true,
+                            minlength: 2,
+                            maxlength: 200,
+                    },
+
+                },
+                
+                messages: {
+                    'company': {
+                        required: '请填写公司名称',
+                        minlength: '公司名称不能少于2个字',
+                        maxlength: '公司名称不能超过200个字',
+                    },
+                    'num' : {
+                        minlength: '编号不能少于2个字',
+                        maxlength: '编号不能超过20个字',
+
+                    },
+                    'name': {
+                        required: '请填写联系人名称',
+                        minlength: '联系人名称不能少于2个字',
+                        maxlength: '联系人名称不能超过20个字',
+                    },
+                    'title': {
+                        required: '请填写联系人职务',
+                        minlength: '联系人职务不能少于2个字',
+                        maxlength: '联系人职务不能超过80个字',
+                    }, 
+                    'mobile':{
+                        required: '请填写手机号',
+                        minlength:'长度为11位',
+                        number:'必须为数字',
+                    },
+                    'email': {
+                        required: '请填写联系人职务',
+                        minlength: '联系人职务不能少于2个字',
+                        maxlength: '联系人职务不能超过80个字',
+                        email: "请输入有效的电子邮件地址",
+                    },
+                    'address': {
+                        required: '请填写联系地址',
+                        minlength: '联系地址不能少于2个字',
+                        maxlength: '联系地址不能超过200个字',
+                    },
+                    'remark': {
+                        required: '请填写客户备注',
+                        minlength: '客户备注不能少于2个字',
+                        maxlength: '客户备注不能超过200个字',
+                    },
+
+                },
+        });
+
+
+
+    /**
+     * 提交表单 
+     * @param {[type]} validation [description]
+     * @param {[type]} form       [description]
+     */
+    function UserDataSubmit( validation, form , callback ) {
+
+        var api = $(form).attr('action');
+        var next = $(form).attr('data-next');
+        var submits = $('button[type="submit"]', form);
+
+
+        $(submits).attr('disabled', 'disabled');
+        $(submits).addClass('disabled');
+
+        var data = {};
+        // 表单格式化
+        var formData =  $(form).serializeArray();
+            for( var i=0; i<formData.length; i++ ) {
+                var name = formData[i]['name'];
+                var value = formData[i]['value'];
+
+                if (value !== "") {
+                    data[name] = value;
+                }
+            }
+
+        // 特殊数值处理
+        if ( typeof data['department'] != 'undefined' ) {        
+            data['department'] =  $('select[name="department"]').val();
+        }
+
+        if ( typeof data['avatar_path'] != 'undefined' ) {        
+            data['avatar'] =  data['avatar_path'];
+            delete data['avatar_path'];
+            delete data['avatar_url'];
+        }
+
+        data = jQuery.extend(data, {});
+
+        $.post( api, data, function(data, textStatus, xhr) {
+
+            $(submits).removeAttr('disabled');
+            $(submits).removeClass('disabled');
+
+            // 如果失败报出失败错误
+            if (data['result']==false){
+
+                App.notify( '操作失败'+data['content'], 'fa fa-times','danger');
+                return;
+            };
+            callback();
+            return;
+
+        },'json')
+
+    }
+})
+ </script>
+ <style>
+ .mustbe{
+    color:red;
+}
+</style>

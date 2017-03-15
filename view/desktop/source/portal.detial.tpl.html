@@ -1,0 +1,24 @@
+<?php use \Tuanduimao\Loader\App as App; ?>
+<!-- 缓存页面 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+</head>
+<body>
+	<div class="block block-content" id="htnl_echo">
+		<span id="htnl_inter"><?=!empty($data)?$data:""?></span>
+	</div>
+</body>
+</html>
+<script src="<?=APP::$APP_HOME_STATIC?>/static/js/jquery.js" type="text/javascript" charset="utf-8"></script>
+<script src="<?=APP::$APP_HOME_STATIC?>/static/js/markdown.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	$(function(){
+		var html_echo = $('#htnl_inter').html();
+		var converter = new Showdown.converter();
+		var html_code = converter.makeHtml(html_echo);
+		$('#htnl_inter').empty().append(html_code)
+  	})
+</script>

@@ -1,0 +1,164 @@
+ <?php use \Tuanduimao\Loader\App as App; ?>
+<div class="content">
+	<div class="form-horizontal">
+  	  	<div class="tab-pane active" id="tabs-status-0">
+			<!-- 阅读模式 -->
+            <div class="row items-push">
+              	<!-- 客户列表 表单 -->
+                <div class="tab-pane active" id="tabs-content-all">
+                    <!-- 列表页 -->
+                   	<table class="js-table-checkable table table-hover">
+			        	<thead>
+			        		<tr>
+			        			<th class="text-center" style="width:10%;"></th>
+			        			<th class="font-w300" style="width:25%;min-width:200px;"></th>
+			                    <th class="font-w300" style="width:10%;"></th>
+			        			<th class="font-w300" style="width:25%;"></th>
+			        		</tr>
+			        	</thead>
+							<tbody>
+			    			<tr>
+			                    <td>公司名称</td>
+			                    <td><?=!empty($data['company'])?$data['company']:"" ?></td>
+			        	        <td>编号</td>
+			        	        <td><div class="left"><?=!empty($data['num'])?$data['num']:"" ?></div><div id="code" class="right-ewm" data-toggle="modal" data-target="#modal-normal"></div>
+			        	        </td>
+
+			        	    </tr>
+			        	    <tr>
+			                    <td>联系人</td>
+			                    <td><?=!empty($data['name'])?$data['name']:"" ?></td>
+			        	        <td>联系人职务</td>
+			        	        <td><?=!empty($data['title'])?$data['title']:"" ?></td>
+			        	   	</tr>
+			        	    <tr>
+			                    <td>l联系人手机号</td>
+			                    <td><?=!empty($data['mobile'])?$data['mobile']:"" ?></td>
+			        	        <td>联系人邮箱</td>
+			        	        <td><?=!empty($data['email'])?$data['email']:"" ?></td>
+			        	   	</tr>
+			            </tbody>
+			       	</table>
+			       	<table class="table">
+			        	<tbody>
+			    			<tr>
+			                    <td  style="width:2%">联系人地址</td>
+			                    <td  style="width:20%;"><?=!empty($data['address'])?$data['address']:"" ?></td>
+			        	    </tr>
+			            </tbody>
+			       	</table>
+					<table class="js-table-checkable table table-hover remove-margin">
+			            <thead>
+			                <tr>
+			                    <th class="text-center" style="width:100%;"></th>
+			                </tr>
+			            </thead>
+			            <tbody>
+							<tr>
+			                    <td >
+			                        <?=!empty($data['remark'])?$data['remark']:"" ?>
+			                    </td>
+			                </tr>
+			            </tbody>
+			        </table>
+                    <!-- 列表页结束 -->
+                </div>
+                <!-- 客户列表表单结束 -->
+			</div>
+        	<!-- tab切换end -->
+		</div>
+        <!-- 按钮区域 -->
+		<div class="form-group">
+            <div class="col-xs-12">
+                <div class="col-xs-3">
+                     <div class="form-material">
+                        <button class="btn btn-minw btn-primary pull-left bcmessage noopen">关闭窗口</button>
+                    </div> 
+                </div>
+                <div class="col-xs-4">
+          		</div>
+                <div class="col-xs-4">
+                     <div class="form-material">
+                        <button class="btn btn-minw btn-primary pull-right content-xiugai" type="button">修改模式</button>
+                    </div> 
+                </div>
+            </div>
+        </div>
+		<!-- END Normal Modal -->
+		<!-- 按钮区域结束 -->
+	</div>
+</div>
+<script src="<?=APP::$APP_HOME_STATIC?>/static/js/jquery.qrcode.min.js" type="text/javascript" charset="utf-8"></script>
+<script>
+	$(function(){
+		 App.loading().hide();
+		// 关闭窗口
+		$('.noopen').click(function(){
+			 noopen();
+		});
+
+		// 阅读模式切换修改模式
+		$('.content-xiugai').click(function(event) {
+			$('.yuedutype').removeClass('show');
+			$('.xiugaitype').removeClass('hide');
+			$('.yuedutype').addClass('hide');
+			$('.xiugaitype').addClass('show');
+		});
+		// 点击放大二维码
+		$('.right-ewm').click(function(){
+			var html = $(this).html();
+			$('.qrcode-type').empty().append(html);
+			$('.qrcode-type').find('table').css("width","200px");
+        	$('.qrcode-type').find('table').css("height","200px"); 
+		});
+	})
+	// 生成短地址
+	$(function(){
+		var str = "<?=App::PR('Mobcustomerpanel','read',['_id'=>$_GET['_id']])?>";
+		$.post("<?=App::PR('CustomerData','orcode')?>",{str:str},function(data) {
+			qrcode(data);
+		});
+	})
+	// 二维码设置
+	function  qrcode(data){
+			var data = toUtf8(data);
+			$('.right-ewm').empty();
+			$("#code").qrcode({
+				render: "table",
+				width: 50,
+				height:50,
+				text: data
+			});
+	}
+	// 生成二维码
+	function toUtf8(str) {   
+	    var out, i, len, c;   
+	    out = "";   
+	    len = str.length;   
+	    for(i = 0; i < len; i++) {   
+	    	c = str.charCodeAt(i);   
+	    	if ((c >= 0x0001) && (c <= 0x007F)) {   
+	        	out += str.charAt(i);   
+	    	} else if (c > 0x07FF) {   
+	        	out += String.fromCharCode(0xE0 | ((c >> 12) & 0x0F));   
+	        	out += String.fromCharCode(0x80 | ((c >>  6) & 0x3F));   
+	        	out += String.fromCharCode(0x80 | ((c >>  0) & 0x3F));   
+	    	} else {   
+	        	out += String.fromCharCode(0xC0 | ((c >>  6) & 0x1F));   
+	        	out += String.fromCharCode(0x80 | ((c >>  0) & 0x3F));   
+	    	}   
+	    }   
+	    return out;   
+	} 
+</script>
+<style>
+.left{
+	width:30%; float:left;
+	position: relative;
+    top: 13px;
+}
+.right{
+	width:30%; 
+	float:left
+}
+</style>

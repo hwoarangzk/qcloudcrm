@@ -1,0 +1,83 @@
+<?php use \Tuanduimao\Loader\App as App; ?>
+ <div class="block block-content remove-padding" style="height:auto;">
+    <!-- tab头部区域 -->
+    <ul  class="nav nav-tabs nav-tabs-alt" data-toggle="tabs">
+        <li class="active"> 
+            <a id="tabs-all" href="#tabs-content-xiangqing"  class="font-w300 tabs-menu"  data-remote="<?=App::NR('CustomerPanel','read',['_id'=>$_id])?>" >详情
+            </a>
+        </li> 
+        <li> 
+            <a id="tabs-label" href="#tabs-content-label"  class="font-w300 tabs-menu" data-remote="<?=App::NR('Marking','index',['_id'=>$_id])?>" >标注
+            </a>
+        </li> 
+        <li> 
+            <a id="tabs-trace" href="#tabs-content-trace"  class="font-w300 tabs-menu" data-remote="<?=App::NR('Tracking','index',['_id'=>$_id])?>" >追踪
+            </a>
+        </li> 
+ 
+        <li class="pull-right noopen" >
+            <a id="tabs-trace" href="#"  class="font-w300 tabs-menu">关闭
+            </a>
+        </li> 
+    </ul>
+    <!-- tab头部区域结束 -->
+    <!-- TAB内容开始 -->
+    <div class="tab-content">
+        <div class="tab-pane hide" id="tab-pane-error" >
+            <div class="alert alert-danger push-50-l push-50-r push-20-t ">
+                <h3 class="font-w300 push-15">载入失败</h3>
+                <p>{HTML}</p>
+            </div>
+            <div class="row"  style="min-height:300px;" ></div>
+        </div>
+        <!-- 右侧弹出 表单 -->
+        <!-- 详情 -->
+        <div class="tab-pane active" id="tabs-content-xiangqing">
+        	<div class="show <?php 
+                if($type=='read'){
+
+                    echo "show";
+                   
+                }?> 
+
+                <?php 
+                if($type=='update'){
+
+                    echo "hide";
+                   
+                }?> yuedutype">
+        		<?=App::NRUN('CustomerPanel','read',['_id'=>$_id])?>
+        	</div>
+        	<div class="hide <?php 
+
+                if($type=='update'){
+
+                    echo "show";
+                   
+                }?> 
+
+                <?php 
+                if($type=='read'){
+
+                    echo "hide";
+                   
+                }?>  xiugaitype">
+        		<?=App::NRUN('CustomerPanel','modify',['_id'=>$_id])?>
+        	</div>
+       </div>
+        <!-- 详情结束 -->
+        <!-- 标注 -->
+        <div class="tab-pane" id="tabs-content-label"></div>
+        <!-- 标注结束 -->
+        <!-- 追踪 -->
+        <div class="tab-pane" id="tabs-content-trace"></div>
+        <!-- 追踪结束 -->
+        <!-- 右侧弹出表单结束 -->
+    </div>
+</div>  
+<script>
+    // 初始化表单
+    $(function(){
+        App.initHelper('nav-tabs', {'id':'.nav-tabs-alt'});
+    })
+</script>
