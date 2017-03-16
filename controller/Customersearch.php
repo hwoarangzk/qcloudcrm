@@ -25,7 +25,7 @@ class CustomersearchController extends \Tuanduimao\Loader\Controller {
 		$Customer->testcreate();
 	}
 
-	function testphp221() {
+	function testphp2211() {
 		phpinfo();
 	}
 
